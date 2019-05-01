@@ -1,0 +1,40 @@
+body {
+    background-image: url(https://as1.ftcdn.net/jpg/00/45/81/10/500_F_45811028_gYeeHYNlWubiaBfaOjD5BzbUBm6sNrfu.jpg)
+}
+.container {
+    font-weight: 900;
+    font-size: 25px;
+    
+    
+}
+.jumbotron {
+    color: black;
+    border-style: solid;
+    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg)
+    
+       
+}
+
+.row {
+    padding: 10px;
+
+}
+
+.display-4 {
+    font-size: 80px;
+    color: yellow;
+    border-style: solid;
+    background-color: grey;
+    background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
+    
+
+
+    
+}
+.lead {
+    font-size: 20px;
+    color: yellow;
+    border-style: solid;
+    background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
+
+}
