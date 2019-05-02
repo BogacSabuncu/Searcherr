@@ -40,7 +40,7 @@ $(document).ready(function () {
         const userName = $("#email").val().trim()
         const password = $("#password").val().trim()
 
-        try
+        //try
 
         signIn(userName, password);
 
