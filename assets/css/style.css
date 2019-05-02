@@ -39,3 +39,10 @@ body {
     padding: 10px;
 }
 
+.login-link {
+    float: right;
+    margin-right: 10px;
+    color: rgb(201, 197, 197);
+    
+}
+
