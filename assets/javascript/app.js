@@ -1,4 +1,4 @@
-function getPrivateJob(originalJob) {
+function normalizePrivateJob(originalJob) {
     const job = {};
     job.location = {};
 
@@ -16,7 +16,6 @@ function getPrivateJob(originalJob) {
     return job;
 }
 
-
 function privateApiCall() {
     let appId = "0cbadb14"; //app id for adzuna
     let key = "64d8e2d23b6325105d8459f517395077";//key for adzuna
@@ -33,22 +32,10 @@ function privateApiCall() {
     });
 
     let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/1?${queryParams}`;
-    //console.log(apiURL);
-    $.ajax({
+    return $.ajax({
         url: apiURL,
         method: "GET"
-    }).then(function (response) {
-        console.log(response);
-        const jobObj = response.results.map(function (job) {
-            return getPrivateJob(job);
-        });
-
-        console.log(jobObj);
-        return jobObj;
-    }).catch(function (err) {
-        console.log(err);
-    });
-
+    })
 
 }
 
@@ -70,7 +57,7 @@ function jobDisplay(job) {
     `);
 }
 
-function normalizeJob(usajob) {
+function normalizeUSAJob(usajob) {
     let jobNorm = {};
     jobNorm.title = usajob.PositionTitle;
     jobNorm.company = usajob.OrganizationName;
@@ -96,24 +83,15 @@ function normalizeJob(usajob) {
 function govApiCall() {
     const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
-    $.ajax({
+   return  $.ajax({
         headers: {
             'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
         },
         url: BASEURL_USAJOBS,
         data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75 },
         method: "GET"
-    }).then(function (jobs) {
-        console.log(jobs);
-        const resultList = jobs.SearchResult.SearchResultItems.map(function (result) {
-            return normalizeJob(result.MatchedObjectDescriptor);
-        });
-        console.log(resultList);
-        $("#main").html(jobDisplay(resultList[0]));
-        return resultList;
-    }).catch(function (err) {
-        console.log(error);
     })
+    
 }
 
 
@@ -124,6 +102,20 @@ $(document).ready(function () {
     
     //privateApiCall();
    const jobResults =  govApiCall();
+   const jobSearchPromise = [privateApiCall(), govApiCall()];
+   Promise.all(jobSearchPromise).then(function(jobResults){
+       console.log(jobResults);
+       const jobObj = response.results.map(function (job) {
+             return normalizePrivateJob(job);
+        });
+
+        const resultList = jobs.SearchResult.SearchResultItems.map(function (result) {
+            return normalizeUSAJob(result.MatchedObjectDescriptor);
+        });
+
+   }).catch(function(err){
+       console.log(err);
+   })
    
    
    
