@@ -57,26 +57,26 @@ function jobDisplay(job) {
     `);
 }
 
-function normalizeUSAJob(usajob) {
-    let jobNorm = {};
-    jobNorm.title = usajob.PositionTitle;
-    jobNorm.company = usajob.OrganizationName;
-    jobNorm.location = {
-        city: usajob.PositionLocation[0].LocationName,
-        country: usajob.PositionLocation[0].CountryCode,
-        lat: usajob.PositionLocation[0].Longitude,
-        long: usajob.PositionLocation[0].Latitude,
+function normalizeUSAJob(usaJob) {
+    let job = {};
+    job.title = usaJob.PositionTitle;
+    job.company = usaJob.OrganizationName;
+    job.location = {
+        city: usaJob.PositionLocation[0].LocationName,
+        country: usaJob.PositionLocation[0].CountryCode,
+        lat: usaJob.PositionLocation[0].Longitude,
+        long: usaJob.PositionLocation[0].Latitude,
 
     }
 
-    jobNorm.url = usajob.PositionURI;
-    jobNorm.salaryMin = usajob.PositionRemuneration[0].MinimumRange;
-    jobNorm.salaryMax = usajob.PositionRemuneration[0].MaximumRange;
-    jobNorm.description = usajob.UserArea.Details.JobSummary;
-    // jobNorm.qualification = usajob.QualificationSummary;
-    // jobNorm.startDate = usajob.PublicationStartDate;
-    // jobNorm.closeDate = usajob.ApplicationCloseDate;
-    return jobNorm;
+    job.url = usaJob.PositionURI;
+    job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange;
+    job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange;
+    job.description = usaJob.UserArea.Details.JobSummary;
+    // job.qualification = usaJob.QualificationSummary;
+    // job.startDate = usaJob.PublicationStartDate;
+    // job.closeDate = usaJob.ApplicationCloseDate;
+    return job;
 
 }
 
@@ -105,13 +105,16 @@ $(document).ready(function () {
    const jobSearchPromise = [privateApiCall(), govApiCall()];
    Promise.all(jobSearchPromise).then(function(jobResults){
        console.log(jobResults);
-       const jobObj = response.results.map(function (job) {
-             return normalizePrivateJob(job);
+       const privateJobResults = jobResults[0].results.map(function (privateJob) {
+             return normalizePrivateJob(privateJob);
         });
 
-        const resultList = jobs.SearchResult.SearchResultItems.map(function (result) {
-            return normalizeUSAJob(result.MatchedObjectDescriptor);
+        const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
+            return normalizeUSAJob(govJob.MatchedObjectDescriptor);
         });
+        console.log(privateJobResults);
+        console.log("----------------------------------------");
+        console.log(govJobResults);
 
    }).catch(function(err){
        console.log(err);
