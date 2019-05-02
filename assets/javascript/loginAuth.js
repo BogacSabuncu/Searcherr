@@ -29,51 +29,73 @@ $(document).ready(function () {
     function signUp(email, password) {
         console.log(`email: ${email} password: ${password}`);
         firebaseApp.createUserWithEmailAndPassword(email, password).catch(error => {
-            signIn(email, password);
+            $(".bad-stuff").text(error.message);
+            //console.log(error);
         });
     }
 
+    function signInError () {
+        $(".bad-stuff").text("Your username or password are incorrect.")
+    }
 
     $(".submit-login").on("click", function (e) {
         e.preventDefault();
 
+        $(".bad-stuff").text("");
+
         const userName = $("#email").val().trim()
         const password = $("#password").val().trim()
 
-        //try
+        try {
 
-        signIn(userName, password);
+            if (password === $("#password-confirm").val().trim()) {
+                console.log("signUpSetup has run")
+                signUp(userName, password);
+            } else {
+                $(".bad-stuff").text("Your passwords do not match.")
+            }
+
+        } catch (err) {
+            console.log(err);
+            signIn(userName, password);
+            //signUpSetup();
+        }
+        
+        
 
 
     })
 
     let isSignUp = false;
 
-    $(".submit-sign-up").on("click", function (e) {
-        e.preventDefault();
+    function signUpSetup() {
+
+        console.log("signUpSetup has run")
+        //e.preventDefault();
 
 
         //const userName = $("#email").val().trim()
         //const password = $("#password").val().trim()
+        console.log(isSignUp)
 
         const newUser = renderConfirmPassword(isSignUp)
-        if (newUser.status) {
-            isSignUp = true;
-            $(".pw").append(newUser.confirmArea);
-        }
-        /*
-        if (password === $("#password-confirm").val().trim() && isSignUp) {
-            signUp(userName, password);
-        } else {
-            $(".submit-area").append(`<p style="color: red;">¸Your passwords do not match.</p>`)
-        }
-        */
-    })
 
-    function renderConfirmPassword (hasRun) {
+        console.log(newUser)
+
+        if (!newUser.status) {
+            isSignUp = true;
+            console.log(isSignUp)
+            $(".pw").append(newUser.confirmArea);
+            $(".submit-sign-up").remove();
+        }
+    }
+
+    $(".submit-sign-up").on("click", signUpSetup)
+
+    function renderConfirmPassword(hasRun) {
 
         return {
-            confirmArea:`<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-lg">Confirm Password</span></div><input type="text" id="password-confrim" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="" /></div>`,
+            confirmArea: `<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-lg">Confirm Password</span></div><input type="text" id="password-confirm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="" /></div>`,
             status: hasRun
         }
     }
