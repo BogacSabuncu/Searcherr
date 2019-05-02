@@ -1,5 +1,5 @@
 body {
-    background-color;
+   background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg)
 }
 .container {
     font-weight: 900;
@@ -10,9 +10,7 @@ body {
 .jumbotron {
     color: black;
     border-style: solid;
-    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg)
-    
-       
+    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg)       
 }
 
 .row {
@@ -22,25 +20,29 @@ body {
 
 .display-4 {
     font-size: 80px;
-    color: yellow;
+    color: rgb(201, 197, 197);
     border-style: solid;
     background-color: grey;
-    background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
-    
-
-
-    
+    background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80);
+      
 }
+
+
 .lead {
     font-size: 20px;
-    color: yellow;
+    color: rgb(201, 197, 197);;
     border-style: solid;
     background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
 
+}
+.col {
+    padding: 10px;
 }
 
 .login-link {
     float: right;
-    margin-right: 10px; 
-    color: yellow;
+    margin-right: 10px;
+    color: rgb(201, 197, 197);
+    
 }
+
