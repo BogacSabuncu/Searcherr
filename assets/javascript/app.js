@@ -17,16 +17,21 @@ $(document).ready(function(){
     //  }
      function jobDisplay(job){
         return (`
-        // <div>
-        //     <h2>${job.title}</h2>
-        //     <h2>${job.company}</h2>
-        //     <h4>${job.location.countr} ${job.location.city}</h4>
-        //     <h4>${job.company}</h4>
-        //     <h4>${job.salary}</h4>
-        //     <p>${job.description}</p>
-        // </div>
-        // <button >Yes</button>
-        // <button>No</button>
+        <div>
+            <h2>${job.title}</h2>
+            <h2>${job.company}</h2>
+            <h4>${job.location.country} ${job.location.city}</h4>
+            <h4>${job.company}</h4>
+            <h4>${job.salaryMin}</h4>
+            <h4>${job.salaryMax}</h4>
+            <h4>${job.salaryMax}</h4>
+
+            <p>${job.description}</p>
+            <p>${job.qualification}</p>
+
+        </div>
+        <button >Yes</button>
+        <button>No</button>
         `);
     }
     function  normalizeJob(usajob){
@@ -48,7 +53,6 @@ $(document).ready(function(){
             jobNorm.qualification = usajob.QualificationSummary;
             jobNorm.startDate = usajob.PublicationStartDate;
             jobNorm.closeDate = usajob.ApplicationCloseDate;
-
         return jobNorm;
         
     }
