@@ -38,3 +38,9 @@ body {
     background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
 
 }
+
+.login-link {
+    float: right;
+    margin-right: 10px; 
+    color: yellow;
+}
