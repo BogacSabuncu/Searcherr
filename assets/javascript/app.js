@@ -53,8 +53,8 @@ function jobDisplay(job) {
         <p style="font-size:1em"> ${job.description}</p>
 
     </div>
-    <button >Yes</button>
-    <button>No</button>
+    <button class="yesBtn">Yes</button>
+    <button class="noBtn">No</button>
     `);
 }
 
@@ -118,8 +118,17 @@ $(document).ready(function () {
         console.log(govJobResults);
         
         //display results in the DOM
-        $("#main").append(jobDisplay(privateJobResults[0]));
-        $("#main").append(jobDisplay(govJobResults[0]));
+        let privateCounter = 0;
+        let govCounter = 0;
+        $("#main").html(jobDisplay(privateJobResults[0]));
+        $("#main").on("click", ".yesBtn", function(){
+            privateCounter++;
+            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+        })
+        $("#main").on("click", ".noBtn", function(){
+            privateCounter++;
+            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+        })
 
 
    }).catch(function(err){
