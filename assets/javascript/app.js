@@ -48,8 +48,9 @@ function jobDisplay(job) {
         <h4>Company: ${job.company}</h4>
         <h4>Salaray Min: ${job.salaryMin}</h4>
         <h4>Salaray Min:${job.salaryMax}</h4>
+        <a href=${job.url}> Click here to apply </a>
         <h5>Description:</h5>
-        <p> ${job.description}</p>
+        <p style="font-size:1em"> ${job.description}</p>
 
     </div>
     <button >Yes</button>
@@ -115,6 +116,11 @@ $(document).ready(function () {
         console.log(privateJobResults);
         console.log("----------------------------------------");
         console.log(govJobResults);
+        
+        //display results in the DOM
+        $("#main").append(jobDisplay(privateJobResults[0]));
+        $("#main").append(jobDisplay(govJobResults[0]));
+
 
    }).catch(function(err){
        console.log(err);
