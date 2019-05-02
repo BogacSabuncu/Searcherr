@@ -44,6 +44,7 @@ function privateApiCall() {
         });
 
         console.log(jobObj);
+        return jobObj;
     }).catch(function (err) {
         console.log(err);
     });
@@ -54,13 +55,14 @@ function privateApiCall() {
 function jobDisplay(job) {
     return (`
     <div>
-        <h2>${job.title}</h2>
-        <h2>${job.company}</h2>
-        <h4>${job.location.country} ${job.location.city}</h4>
-        <h4>${job.company}</h4>
-        <h4>${job.salaryMin}</h4>
-        <h4>${job.salaryMax}</h4>
-        <p>${job.description}</p>
+        <h2>Title: ${job.title}</h2>
+        <h2> Company: ${job.company}</h2>
+        <h4>location: ${job.location.country} ${job.location.city}</h4>
+        <h4>Company: ${job.company}</h4>
+        <h4>Salaray Min: ${job.salaryMin}</h4>
+        <h4>Salaray Min:${job.salaryMax}</h4>
+        <h5>Description:</h5>
+        <p> ${job.description}</p>
 
     </div>
     <button >Yes</button>
@@ -107,6 +109,8 @@ function govApiCall() {
             return normalizeJob(result.MatchedObjectDescriptor);
         });
         console.log(resultList);
+        $("#main").html(jobDisplay(resultList[0]));
+        return resultList;
     }).catch(function (err) {
         console.log(error);
     })
@@ -117,9 +121,10 @@ function govApiCall() {
 
 
 $(document).ready(function () {
-
+    
     //privateApiCall();
-    govApiCall();
+   const jobResults =  govApiCall();
+   
    
 })
 
