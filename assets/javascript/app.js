@@ -3,16 +3,16 @@ function normalizePrivateJob(originalJob) {
     job.location = {};
 
     //gets all the necesarry information out of the API call and assigns it to the object
-    job.title = originalJob.title;
-    job.salaryMin = originalJob.salary_min;
-    job.salaryMax = originalJob.salary_max;
-    job.url = originalJob.redirect_url;
-    job.company = originalJob.company.display_name;
-    job.description = originalJob.description;
-    job.location.country = originalJob.location.area[0];
-    job.location.city = originalJob.location.area[1];
-    job.location.lat = originalJob.latitude;
-    job.location.long = originalJob.longitude;
+    job.title = originalJob.title; //Job Title
+    job.salaryMin = originalJob.salary_min; //minimum salary
+    job.salaryMax = originalJob.salary_max; //maximum salary
+    job.url = originalJob.redirect_url; //Url for the Job
+    job.company = originalJob.company.display_name; //company name
+    job.description = originalJob.description; //job description
+    job.location.country = originalJob.location.area[0]; //country
+    job.location.city = originalJob.location.area[1]; //city
+    job.location.lat = originalJob.latitude; //coordinates
+    job.location.long = originalJob.longitude; //coordinates
 
     return job;
 }
