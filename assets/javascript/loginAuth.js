@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 
     // Initialize Firebase
-    var config = {
+    const config = {
         apiKey: "AIzaSyDPTi1BfLqpqxdT1RvD-kLylgoq_JDhWlU",
         authDomain: "team-red-212d0.firebaseapp.com",
         databaseURL: "https://team-red-212d0.firebaseio.com",
@@ -17,24 +17,58 @@ $(document).ready(function () {
 
     firebase.initializeApp(config);
 
-    const firebaseApp = firebase.auth()
+    const firebaseApp = firebase.auth();
+    const firebaseData = firebase.database();
 
 
     function signIn(email, password) {
-        console.log(`email: ${email} password: ${password}`);
-        firebaseApp.signInWithEmailAndPassword(email, password).catch(error => {
+        //console.log(`email: ${email} password: ${password}`);
+        const signInPromise = firebaseApp.signInWithEmailAndPassword(email, password).catch(error => {
             signInError();
         });
-    }
+        signInPromise.then(function () {
+            const user = firebaseApp.currentUser
+            console.log(user.email)
+            if (user) {
+
+                userDirectory = user.email.split("@")[0];
+
+                localStorage.setItem("currentUser", userDirectory);
+
+                firebaseData.ref(`${userDirectory}`).set({
+                    userData: {
+                        username: user.email,
+                        savedJobRefs: []
+                    }
+                });
+
+                window.location.href = "index.html";
+
+            } else {
+                // No user is signed in.
+            }
+        });
+    };
     function signUp(email, password) {
-        console.log(`email: ${email} password: ${password}`);
-        firebaseApp.createUserWithEmailAndPassword(email, password).catch(error => {
+        //console.log(`email: ${email} password: ${password}`);
+        const signUpPromise = firebaseApp.createUserWithEmailAndPassword(email, password).catch(error => {
             $(".bad-stuff").text(error.message);
             //console.log(error);
         });
+        signUpPromise.then(function () {
+            const user = firebaseApp.currentUser
+            console.log(user)
+            if (user) {
+                window.location.href = "index.html";
+
+                console.log(user.email)
+            } else {
+                // No user is signed in.
+            }
+        });
     }
 
-    function signInError () {
+    function signInError() {
         $(".bad-stuff").text("Your username or password are incorrect.")
     }
 
@@ -60,8 +94,8 @@ $(document).ready(function () {
             signIn(userName, password);
             //signUpSetup();
         }
-        
-        
+
+
 
 
     })
@@ -99,4 +133,6 @@ $(document).ready(function () {
             status: hasRun
         }
     }
+
+
 });

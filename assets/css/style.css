@@ -2,8 +2,8 @@ body {
    background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg)
 }
 .container {
-    font-weight: 900;
-    font-size: 25px;
+    /*font-weight: 900;
+    font-size: 25px;*/
     
     
 }
@@ -70,3 +70,14 @@ body {
 
 } 
 
+/* */
+.cardJob{
+    width: 70%;
+    margin:0 auto;
+}
+.yesBtn{
+    float: left;
+}
+.noBtn{
+    float: right;
+}
