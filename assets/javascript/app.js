@@ -130,10 +130,8 @@ function govApiCall() {
 
 
 $(document).ready(function () {
-<<<<<<< HEAD
 
     //privateApiCall();
-    const jobResults = govApiCall();
     const jobSearchPromise = [privateApiCall(), govApiCall()];
     Promise.all(jobSearchPromise).then(function (jobResults) {
         console.log(jobResults);
@@ -175,7 +173,6 @@ $(document).ready(function () {
 
 
 
-=======
     //////
     $("#jobSubmit").click(function(event){
         event.preventDefault();
@@ -238,7 +235,6 @@ $(document).ready(function () {
    
    
    
->>>>>>> 718e278683e0d00c9ec2772fcac44a82a17c942b
 })
 
 
