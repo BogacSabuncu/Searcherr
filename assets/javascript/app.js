@@ -2,6 +2,7 @@ function normalizePrivateJob(originalJob) {
     const job = {};
     job.location = {};
 
+    //gets all the necesarry information out of the API call and assigns it to the object
     job.title = originalJob.title;
     job.salaryMin = originalJob.salary_min;
     job.salaryMax = originalJob.salary_max;
@@ -16,22 +17,24 @@ function normalizePrivateJob(originalJob) {
     return job;
 }
 
-function privateApiCall() {
+function privateApiCall(pageCount) {
     let appId = "0cbadb14"; //app id for adzuna
     let key = "64d8e2d23b6325105d8459f517395077";//key for adzuna
-    let jobTitle = "javascript developer";//job search title
-    let jobLocation = "london";//job Location
+    let jobTitle = "javascript developer";//Gonna be user input later
+    let jobLocation = "london";//Gonna be user Input later
 
+    //parameters for the ajax URL
     const queryParams = $.param({
         "app_id": appId,
         "app_key": key,
-        "results_per_page": 50,
+        "results_per_page": 5,
         "content-type": "application/json",
         "what": jobTitle,
         "where": jobLocation
     });
 
-    let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/1?${queryParams}`;
+    //ajax call
+    let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/${pageCount}?${queryParams}`;
     return $.ajax({
         url: apiURL,
         method: "GET"
@@ -79,62 +82,95 @@ function normalizeUSAJob(usaJob) {
 
 }
 
-function govApiCall() {
+function govApiCall(pageCount) {
     const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
-   return  $.ajax({
+    return $.ajax({
         headers: {
             'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
         },
         url: BASEURL_USAJOBS,
-        data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75 },
+        data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75, ResultsPerPage: 5, Page: pageCount },
         method: "GET"
     })
-    
+
 }
 
+function getJobs(pageCount) {
 
-$(document).ready(function () {
+    const jobSearchPromise = [privateApiCall(pageCount), govApiCall(pageCount)]; //gets the promises and puts them into an array
     
-    //privateApiCall();
-   const jobResults =  govApiCall();
-   const jobSearchPromise = [privateApiCall(), govApiCall()];
-   Promise.all(jobSearchPromise).then(function(jobResults){
-       console.log(jobResults);
-       const privateJobResults = jobResults[0].results.map(function (privateJob) {
-             return normalizePrivateJob(privateJob);
+    //waits all the promises to resolve and returns a promise out the function 
+    return Promise.all(jobSearchPromise).then(function (jobResults) {
+        // console.log(jobResults);
+
+        //normalizes the objects and maps them into an array
+        const privateJobResults = jobResults[0].results.map(function (privateJob) {
+            return normalizePrivateJob(privateJob);
         });
 
+        //normalizes the objects and maps them into an array
         const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
             return normalizeUSAJob(govJob.MatchedObjectDescriptor);
         });
-        console.log(privateJobResults);
-        console.log("----------------------------------------");
-        console.log(govJobResults);
+
+
+        // console.log(privateJobResults);
+        // console.log("----------------------------------------");
+        // console.log(govJobResults);
+
+        //concats two arrays into one    
+        const allJobs = privateJobResults.concat(govJobResults);
+
+        //display the first screen
+        $("#main").html(jobDisplay(allJobs[0]));
+
         
+        return allJobs;//returns the array as the argument of the next function 
+    }).catch(function (err) {
+        console.log(err);
+    });
+}
+
+
+
+$(document).ready(function () {
+
+    let pageCount = 1;//page of the API call
+
+    //runs the getJobs function to get the arrays 
+    getJobs(pageCount).then(function (allJobs) {
+
         //display results in the DOM
-        let privateCounter = 0;
-        let govCounter = 0;
-        $("#main").html(jobDisplay(privateJobResults[0]));
-        $("#main").on("click", ".yesBtn", function(){
-            privateCounter++;
-            //condition to get results from privateJobResults array or govJobResults
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
-            
+        let allJobCounter = 1;
+
+        $("#main").on("click", ".yesBtn", function () {
+            if (allJobCounter < allJobs.length) {
+                allJobCounter++;
+                //condition to get results from allJobs array or govJobResults
+                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+            }
+            else {
+                pageCount++;
+                allJobs = getJobs(pageCount);
+            }
+
         })
-        $("#main").on("click", ".noBtn", function(){
-            privateCounter++;
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+        $("#main").on("click", ".noBtn", function () {
+            if (allJobCounter < allJobs.length) {
+                allJobCounter++;
+                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+            }
+            else {
+                pageCount++;
+                allJobs = getJobs(pageCount);
+            }
         })
 
-
-   }).catch(function(err){
-       console.log(err);
-   })
-   
-   
-   
+    });
 })
+
+
 
 
 
