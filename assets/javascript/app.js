@@ -3,16 +3,16 @@ function normalizePrivateJob(originalJob) {
     job.location = {};
 
     //gets all the necesarry information out of the API call and assigns it to the object
-    job.title = originalJob.title; //Job Title
-    job.salaryMin = originalJob.salary_min; //minimum salary
-    job.salaryMax = originalJob.salary_max; //maximum salary
-    job.url = originalJob.redirect_url; //Url for the Job
-    job.company = originalJob.company.display_name; //company name
-    job.description = originalJob.description; //job description
-    job.location.country = originalJob.location.area[0]; //country
-    job.location.city = originalJob.location.area[1]; //city
-    job.location.lat = originalJob.latitude; //coordinates
-    job.location.long = originalJob.longitude; //coordinates
+    job.title = originalJob.title || "N/A"; //Job Title
+    job.salaryMin = originalJob.salary_min || "N/A"; //minimum salary
+    job.salaryMax = originalJob.salary_max || "N/A"; //maximum salary
+    job.url = originalJob.redirect_url || "N/A"; //Url for the Job
+    job.company = originalJob.company.display_name || "N/A"; //company name
+    job.description = originalJob.description || "N/A"; //job description
+    job.location.country = originalJob.location.area[0] || "N/A"; //country
+    job.location.city = originalJob.location.area[1] || "N/A"; //city
+    job.location.lat = originalJob.latitude || "N/A"; //coordinates
+    job.location.long = originalJob.longitude || "N/A"; //coordinates
 
     return job;
 }
@@ -99,10 +99,10 @@ function govApiCall(pageCount) {
 function getJobs(pageCount) {
 
     const jobSearchPromise = [privateApiCall(pageCount), govApiCall(pageCount)]; //gets the promises and puts them into an array
-    
+
     //waits all the promises to resolve and returns a promise out the function 
     return Promise.all(jobSearchPromise).then(function (jobResults) {
-        // console.log(jobResults);
+        console.log(jobResults);
 
         //normalizes the objects and maps them into an array
         const privateJobResults = jobResults[0].results.map(function (privateJob) {
@@ -115,17 +115,15 @@ function getJobs(pageCount) {
         });
 
 
-        // console.log(privateJobResults);
-        // console.log("----------------------------------------");
-        // console.log(govJobResults);
+        console.log(privateJobResults);
+        console.log("----------------------------------------");
+        console.log(govJobResults);
 
         //concats two arrays into one    
         const allJobs = privateJobResults.concat(govJobResults);
 
-        //display the first screen
-        $("#main").html(jobDisplay(allJobs[0]));
+        console.log(pageCount);
 
-        
         return allJobs;//returns the array as the argument of the next function 
     }).catch(function (err) {
         console.log(err);
@@ -143,39 +141,43 @@ $(document).ready(function () {
 
         //display results in the DOM
         let allJobCounter = 1;
+        //display the first screen
+        $("#main").html(jobDisplay(allJobs[0]));
+
 
         $("#main").on("click", ".yesBtn", function () {
-            if (allJobCounter < allJobs.length) {
-                allJobCounter++;
-                //condition to get results from allJobs array or govJobResults
-                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+            if (allJobCounter === allJobs.length) {
+                pageCount++;
+                getJobs(pageCount).then(function (allJobs) {
+                    allJobCounter = 0;
+
+
+                    $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    allJobCounter++;
+                });
             }
             else {
-                pageCount++;
-                allJobs = getJobs(pageCount);
+                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                allJobCounter++;
             }
 
         })
         $("#main").on("click", ".noBtn", function () {
-            if (allJobCounter < allJobs.length) {
-                allJobCounter++;
-                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+            if (allJobCounter === allJobs.length) {
+                pageCount++;
+                getJobs(pageCount).then(function (allJobs) {
+                    allJobCounter = 0;
+
+
+                    $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    allJobCounter++;
+                });
             }
             else {
-                pageCount++;
-                allJobs = getJobs(pageCount);
+                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                allJobCounter++;
             }
-        })
 
-    });
+        });
+    })
 })
-
-
-
-
-
-
-
-
-
-
