@@ -13,13 +13,11 @@ body {
     background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg)       
 }
 
-.row {
-    padding: 10px;
 
-}
 
-.display-4 { 
-    font-size: 80px;
+
+.display-4 {
+    font-size: 15px;
     color: rgb(201, 197, 197);
     border-style: solid;
     background-color: grey;
@@ -35,9 +33,7 @@ body {
     background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
 
 }
-.col {
-    padding: 10px;
-}
+
 
 .login-link {
     float: right;
@@ -45,4 +41,32 @@ body {
     color: rgb(201, 197, 197);
     
 }
+
+@media only screen and (min-width: 320px){
+    .display-4 {
+        font-size: 25px; 
+    }
+
+}
+
+@media only screen and (min-width: 576px) {
+    .display-4 {
+        font-size: 45px; 
+    }
+
+} 
+
+@media only screen and (min-width: 768px) {
+    .display-4 {
+        font-size: 65px; 
+    }
+
+} 
+
+@media only screen and (min-width: 992px) {
+    .display-4 {
+        font-size: 80px; 
+    }
+
+} 
 
