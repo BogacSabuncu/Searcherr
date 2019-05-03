@@ -85,22 +85,49 @@ $(document).ready(function () {
 
     }
 
-    function jobDisplay(job) {
-        return (`
-    <div>
-        <h2>Title: ${job.title}</h2>
-        <h2> Company: ${job.company}</h2>
-        <h4>location: ${job.location.country} ${job.location.city}</h4>
-        <h4>Company: ${job.company}</h4>
-        <h4>Salaray Min: ${job.salaryMin}</h4>
-        <h4>Salaray Min:${job.salaryMax}</h4>
-        <a href=${job.url}> Click here to apply </a>
-        <h5>Description:</h5>
-        <p style="font-size:1em"> ${job.description}</p>
+function jobDisplay(job) {
+    // return (`
+    // <div>
+    //     <h2>Title: ${job.title}</h2>
+    //     <h2> Company: ${job.company}</h2>
+    //     <h4>location: ${job.location.country} ${job.location.city}</h4>
+    //     <h4>Company: ${job.company}</h4>
+    //     <h4>Salaray Min: ${job.salaryMin}</h4>
+    //     <h4>Salaray Min:${job.salaryMax}</h4>
+    //     <a href=${job.url}> Click here to apply </a>
+    //     <h5>Description:</h5>
+    //     <p style="font-size:1em"> ${job.description}</p>
+
+    // </div>
+    // <button class="yesBtn">Yes</button>
+    // <button class="noBtn">No</button>
+    // `);
+    return (`
+    <div class="cardJob">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">${job.title}</h3>
+            </div>
+            <div class="card-body">
+            
+                <h4>location: ${job.location.country} ${job.location.city}</h4>
+                <h4>Company: ${job.company}</h4>
+                <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+                
+                <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                
+                <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+            </div>
+            <div class="card-footer">
+                <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                <button class="noBtn btn btn-lg btn-danger">No</button>
+            </div>
+        </div>
 
     </div>
-    <button class="yesBtn">Yes</button>
-    <button class="noBtn">No</button>
+    <div class="hideShowJobDiv" style="display: none;">
+        <p> ${job.description}</p>
+     </div>
     `);
     }
 
@@ -187,7 +214,12 @@ $(document).ready(function () {
         })
         $("#main").on("click", ".noBtn", function () {
             privateCounter++;
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+            $("#main").html(jobDisplay(govJobResults[privateCounter]));
+        })
+
+        $("#main").on("click", ".hideShowJobBtn", function () {
+            $(".modal-body").html(privateJobResults[privateCounter].description);
+            $("#jobModal").modal("toggle");
         })
 
 
