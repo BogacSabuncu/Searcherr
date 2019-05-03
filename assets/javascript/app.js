@@ -86,9 +86,7 @@ function normalizeJob(usajob) {
     jobNorm.salaryMin = usajob.PositionRemuneration[0].MinimumRange;
     jobNorm.salaryMax = usajob.PositionRemuneration[0].MaximumRange;
     jobNorm.description = usajob.UserArea.Details.JobSummary;
-    // jobNorm.qualification = usajob.QualificationSummary;
-    // jobNorm.startDate = usajob.PublicationStartDate;
-    // jobNorm.closeDate = usajob.ApplicationCloseDate;
+
     return jobNorm;
 
 }
