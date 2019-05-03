@@ -3,7 +3,7 @@
 $(document).ready(function () {
     //console.log( "ready!" );
 
-    
+
 
     // Initialize Firebase
     const config = {
@@ -17,38 +17,57 @@ $(document).ready(function () {
 
     firebase.initializeApp(config);
 
-    const firebaseApp = firebase.auth()
+    const firebaseApp = firebase.auth();
+    const firebaseData = firebase.database();
 
 
     function signIn(email, password) {
         //console.log(`email: ${email} password: ${password}`);
-        firebaseApp.signInWithEmailAndPassword(email, password).catch(error => {
+        const signInPromise = firebaseApp.signInWithEmailAndPassword(email, password).catch(error => {
             signInError();
         });
-        firebaseApp.onAuthStateChanged(function(user) {
+        signInPromise.then(function () {
+            const user = firebaseApp.currentUser
+            console.log(user.email)
             if (user) {
-              window.location.href = "index.html";
+
+                userDirectory = user.email.split("@")[0];
+
+                localStorage.setItem("currentUser", userDirectory);
+
+                firebaseData.ref(`${userDirectory}`).set({
+                    userData: {
+                        username: user.email
+                    }
+                });
+
+                window.location.href = "index.html";
+
             } else {
-              // No user is signed in.
+                // No user is signed in.
             }
-          });
-            }
+        });
+    };
     function signUp(email, password) {
         //console.log(`email: ${email} password: ${password}`);
-        firebaseApp.createUserWithEmailAndPassword(email, password).catch(error => {
+        const signUpPromise = firebaseApp.createUserWithEmailAndPassword(email, password).catch(error => {
             $(".bad-stuff").text(error.message);
             //console.log(error);
         });
-        firebaseApp.onAuthStateChanged(function(user) {
+        signUpPromise.then(function () {
+            const user = firebaseApp.currentUser
+            console.log(user)
             if (user) {
-              window.location.href = "index.html";
+                window.location.href = "index.html";
+
+                console.log(user.email)
             } else {
-              // No user is signed in.
+                // No user is signed in.
             }
-          });
+        });
     }
 
-    function signInError () {
+    function signInError() {
         $(".bad-stuff").text("Your username or password are incorrect.")
     }
 
@@ -74,8 +93,8 @@ $(document).ready(function () {
             signIn(userName, password);
             //signUpSetup();
         }
-        
-        
+
+
 
 
     })

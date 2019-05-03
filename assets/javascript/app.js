@@ -1,6 +1,8 @@
 
 $(document).ready(function () {
 
+    //Given to you by the firebase console
+    //Identifies your specific app to the DB
     var config = {
         apiKey: "AIzaSyDPTi1BfLqpqxdT1RvD-kLylgoq_JDhWlU",
         authDomain: "team-red-212d0.firebaseapp.com",
@@ -10,11 +12,28 @@ $(document).ready(function () {
         messagingSenderId: "1040465529140"
     };
 
+    //Allows firebase access 
     firebase.initializeApp(config);
 
-    const firebaseApp = firebase.auth()
+    //Initializes services we use
+    const firebaseAuth = firebase.auth()
+    const firebaseData = firebase.database();
 
-    const user = firebase.auth().currentUser;
+    //Checks if you are logged in on your machine
+    if (localStorage.getItem("currentUser")) {
+
+        //gets the data stored on the path with a value equal to your email before the @ symbol.
+        firebaseData.ref(localStorage.getItem("currentUser")).once("value").then(function (snapshot) {
+
+            //console.log("display user object" + snapshot.val());
+            //console.log(snapshot.val());
+
+            if (snapshot.val().userData.username) {
+                $(".login-link").text(`Welcome ${snapshot.val().userData.username}`);
+            }
+
+        });
+    }
 
 
     function getPrivateJob(originalJob) {
