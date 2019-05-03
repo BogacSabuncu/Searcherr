@@ -100,42 +100,65 @@ function govApiCall() {
 
 
 $(document).ready(function () {
+    //////
+    $("#jobSubmit").click(function(event){
+        event.preventDefault();
+        const jobTitle = $("#jobtitle").val();
+    console.log(jobTitle);
+        const location = $("#location").val();
+    console.log(location);
+        const field = $("#field").val();
+    console.log(field);
+        const dateposted = $("#dateposted").val();
+    console.log(dateposted);
+        const salary = $("#salary").val();
+    console.log(salary);
+        const numberofresults = $("#numberofresults").val();
+    console.log(numberofresults);
+
+    })
+    
+        
+
+
+
+    ///////
     
     //privateApiCall();
-   const jobResults =  govApiCall();
-   const jobSearchPromise = [privateApiCall(), govApiCall()];
-   Promise.all(jobSearchPromise).then(function(jobResults){
-       console.log(jobResults);
-       const privateJobResults = jobResults[0].results.map(function (privateJob) {
-             return normalizePrivateJob(privateJob);
-        });
+//    const jobResults =  govApiCall();
+//    const jobSearchPromise = [privateApiCall(), govApiCall()];
+//    Promise.all(jobSearchPromise).then(function(jobResults){
+//        console.log(jobResults);
+//        const privateJobResults = jobResults[0].results.map(function (privateJob) {
+//              return normalizePrivateJob(privateJob);
+//         });
 
-        const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
-            return normalizeUSAJob(govJob.MatchedObjectDescriptor);
-        });
-        console.log(privateJobResults);
-        console.log("----------------------------------------");
-        console.log(govJobResults);
+//         const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
+//             return normalizeUSAJob(govJob.MatchedObjectDescriptor);
+//         });
+//         console.log(privateJobResults);
+//         console.log("----------------------------------------");
+//         console.log(govJobResults);
         
-        //display results in the DOM
-        let privateCounter = 0;
-        let govCounter = 0;
-        $("#main").html(jobDisplay(privateJobResults[0]));
-        $("#main").on("click", ".yesBtn", function(){
-            privateCounter++;
-            //condition to get results from privateJobResults array or govJobResults
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+//         //display results in the DOM
+//         let privateCounter = 0;
+//         let govCounter = 0;
+//         $("#main").html(jobDisplay(privateJobResults[0]));
+//         $("#main").on("click", ".yesBtn", function(){
+//             privateCounter++;
+//             //condition to get results from privateJobResults array or govJobResults
+//             $("#main").html(jobDisplay(privateJobResults[privateCounter]));
             
-        })
-        $("#main").on("click", ".noBtn", function(){
-            privateCounter++;
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
-        })
+//         })
+//         $("#main").on("click", ".noBtn", function(){
+//             privateCounter++;
+//             $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+//         })
 
 
-   }).catch(function(err){
-       console.log(err);
-   })
+//    }).catch(function(err){
+//        console.log(err);
+//    })
    
    
    
