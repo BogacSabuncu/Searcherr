@@ -40,22 +40,50 @@ function privateApiCall() {
 }
 
 function jobDisplay(job) {
+    // return (`
+    // <div>
+    //     <h2>Title: ${job.title}</h2>
+    //     <h2> Company: ${job.company}</h2>
+    //     <h4>location: ${job.location.country} ${job.location.city}</h4>
+    //     <h4>Company: ${job.company}</h4>
+    //     <h4>Salaray Min: ${job.salaryMin}</h4>
+    //     <h4>Salaray Min:${job.salaryMax}</h4>
+    //     <a href=${job.url}> Click here to apply </a>
+    //     <h5>Description:</h5>
+    //     <p style="font-size:1em"> ${job.description}</p>
+
+    // </div>
+    // <button class="yesBtn">Yes</button>
+    // <button class="noBtn">No</button>
+    // `);
     return (`
-    <div>
-        <h2>Title: ${job.title}</h2>
-        <h2> Company: ${job.company}</h2>
-        <h4>location: ${job.location.country} ${job.location.city}</h4>
-        <h4>Company: ${job.company}</h4>
-        <h4>Salaray Min: ${job.salaryMin}</h4>
-        <h4>Salaray Min:${job.salaryMax}</h4>
-        <a href=${job.url}> Click here to apply </a>
-        <h5>Description:</h5>
-        <p style="font-size:1em"> ${job.description}</p>
+    <div class="cardJob">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">${job.title}</h3>
+            </div>
+            <div class="card-body">
+            
+                <h4>location: ${job.location.country} ${job.location.city}</h4>
+                <h4>Company: ${job.company}</h4>
+                <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+                
+                <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                
+                <button class="btn btn-primary hideShowJobBtn">Job Description</button>
+            </div>
+            <div class="card-footer">
+                <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                <button class="noBtn btn btn-lg btn-danger">No</button>
+            </div>
+        </div>
 
     </div>
-    <button class="yesBtn">Yes</button>
-    <button class="noBtn">No</button>
+    <div class="hideShowJobDiv" style="display: none;">
+        <p> ${job.description}</p>
+     </div>
     `);
+
 }
 
 function normalizeUSAJob(usaJob) {
@@ -84,7 +112,7 @@ function normalizeUSAJob(usaJob) {
 function govApiCall() {
     const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
-   return  $.ajax({
+    return $.ajax({
         headers: {
             'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
         },
@@ -92,7 +120,7 @@ function govApiCall() {
         data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75 },
         method: "GET"
     })
-    
+
 }
 
 
@@ -100,14 +128,14 @@ function govApiCall() {
 
 
 $(document).ready(function () {
-    
+
     //privateApiCall();
-   const jobResults =  govApiCall();
-   const jobSearchPromise = [privateApiCall(), govApiCall()];
-   Promise.all(jobSearchPromise).then(function(jobResults){
-       console.log(jobResults);
-       const privateJobResults = jobResults[0].results.map(function (privateJob) {
-             return normalizePrivateJob(privateJob);
+    const jobResults = govApiCall();
+    const jobSearchPromise = [privateApiCall(), govApiCall()];
+    Promise.all(jobSearchPromise).then(function (jobResults) {
+        console.log(jobResults);
+        const privateJobResults = jobResults[0].results.map(function (privateJob) {
+            return normalizePrivateJob(privateJob);
         });
 
         const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
@@ -116,29 +144,33 @@ $(document).ready(function () {
         console.log(privateJobResults);
         console.log("----------------------------------------");
         console.log(govJobResults);
-        
+
         //display results in the DOM
         let privateCounter = 0;
         let govCounter = 0;
         $("#main").html(jobDisplay(privateJobResults[0]));
-        $("#main").on("click", ".yesBtn", function(){
+        $("#main").on("click", ".yesBtn", function () {
             privateCounter++;
             //condition to get results from privateJobResults array or govJobResults
             $("#main").html(jobDisplay(privateJobResults[privateCounter]));
-            
+
         })
-        $("#main").on("click", ".noBtn", function(){
+        $("#main").on("click", ".noBtn", function () {
             privateCounter++;
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+            $("#main").html(jobDisplay(govJobResults[privateCounter]));
+        })
+
+        $("#main").on("click", ".hideShowJobBtn", function () {
+            $(".hideShowJobDiv").toggle();
         })
 
 
-   }).catch(function(err){
-       console.log(err);
-   })
-   
-   
-   
+    }).catch(function (err) {
+        console.log(err);
+    })
+
+
+
 })
 
 
