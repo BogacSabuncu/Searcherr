@@ -123,7 +123,9 @@ $(document).ready(function () {
         $("#main").html(jobDisplay(privateJobResults[0]));
         $("#main").on("click", ".yesBtn", function(){
             privateCounter++;
+            //condition to get results from privateJobResults array or govJobResults
             $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+            
         })
         $("#main").on("click", ".noBtn", function(){
             privateCounter++;
