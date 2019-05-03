@@ -70,7 +70,7 @@ function jobDisplay(job) {
                 
                 <a href=${job.url} class="card-link"> Click here to apply </a><br/>
                 
-                <button class="btn btn-primary hideShowJobBtn">Job Description</button>
+                <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
             </div>
             <div class="card-footer">
                 <button class="yesBtn btn btn-lg btn-primary">Yes</button>
@@ -85,7 +85,9 @@ function jobDisplay(job) {
     `);
 
 }
-
+function displayModal(jobDescription){
+    
+}
 function normalizeUSAJob(usaJob) {
     let job = {};
     job.title = usaJob.PositionTitle;
@@ -161,7 +163,8 @@ $(document).ready(function () {
         })
 
         $("#main").on("click", ".hideShowJobBtn", function () {
-            $(".hideShowJobDiv").toggle();
+            $(".modal-body").html(privateJobResults[privateCounter].description);
+            $("#jobModal").modal("toggle");
         })
 
 
