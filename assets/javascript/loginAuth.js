@@ -37,7 +37,8 @@ $(document).ready(function () {
 
                 firebaseData.ref(`${userDirectory}`).set({
                     userData: {
-                        username: user.email
+                        username: user.email,
+                        savedJobRefs: []
                     }
                 });
 

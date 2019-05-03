@@ -19,11 +19,15 @@ $(document).ready(function () {
     const firebaseAuth = firebase.auth()
     const firebaseData = firebase.database();
 
+    const storedRefs = [];
+
+    var userDirectory = localStorage.getItem("currentUser");
+
     //Checks if you are logged in on your machine
-    if (localStorage.getItem("currentUser")) {
+    if (userDirectory) {
 
         //gets the data stored on the path with a value equal to your email before the @ symbol.
-        firebaseData.ref(localStorage.getItem("currentUser")).once("value").then(function (snapshot) {
+        firebaseData.ref(userDirectory).once("value").then(function (snapshot) {
 
             //console.log("display user object" + snapshot.val());
             //console.log(snapshot.val());
@@ -32,28 +36,31 @@ $(document).ready(function () {
                 $(".login-link").text(`Welcome ${snapshot.val().userData.username}`);
             }
 
-        });
+        }).catch (function () {
+            window.location.href = "login.html";
+        })
+    } else {
+        window.location.href = "login.html";
     }
 
 
-    function getPrivateJob(originalJob) {
-        const job = {};
-        job.location = {};
+    function normalizePrivateJob(originalJob) {
+        const job = Object.create(null);
+        job.location = Object.create(null);
 
-        job.title = originalJob.title;
-        job.salaryMin = originalJob.salary_min;
-        job.salaryMax = originalJob.salary_max;
-        job.url = originalJob.redirect_url;
-        job.company = originalJob.company.display_name;
-        job.description = originalJob.description;
-        job.location.country = originalJob.location.area[0];
-        job.location.city = originalJob.location.area[1];
-        job.location.lat = originalJob.latitude;
-        job.location.long = originalJob.longitude;
+        job.title = originalJob.title || "N/A";
+        job.salaryMin = originalJob.salary_min || "N/A";
+        job.salaryMax = originalJob.salary_max || "N/A";
+        job.url = originalJob.redirect_url || "N/A";
+        job.company = originalJob.company.display_name || "N/A";
+        job.description = originalJob.description || "N/A";
+        job.location.country = originalJob.location.area[0] || "N/A";
+        job.location.city = originalJob.location.area[1] || "N/A";
+        job.location.lat = originalJob.latitude || "N/A";
+        job.location.long = originalJob.longitude || "N/A";
 
         return job;
     }
-
 
     function privateApiCall() {
         let appId = "0cbadb14"; //app id for adzuna
@@ -71,22 +78,10 @@ $(document).ready(function () {
         });
 
         let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/1?${queryParams}`;
-        //console.log(apiURL);
-        $.ajax({
+        return $.ajax({
             url: apiURL,
             method: "GET"
-        }).then(function (response) {
-            console.log(response);
-            const jobObj = response.results.map(function (job) {
-                return getPrivateJob(job);
-            });
-
-            console.log(jobObj);
-            return jobObj;
-        }).catch(function (err) {
-            console.log(err);
-        });
-
+        })
 
     }
 
@@ -99,76 +94,111 @@ $(document).ready(function () {
         <h4>Company: ${job.company}</h4>
         <h4>Salaray Min: ${job.salaryMin}</h4>
         <h4>Salaray Min:${job.salaryMax}</h4>
+        <a href=${job.url}> Click here to apply </a>
         <h5>Description:</h5>
-        <p> ${job.description}</p>
+        <p style="font-size:1em"> ${job.description}</p>
 
     </div>
-    <button >Yes</button>
-    <button>No</button>
+    <button class="yesBtn">Yes</button>
+    <button class="noBtn">No</button>
     `);
     }
 
-    function normalizeJob(usajob) {
-        let jobNorm = {};
-        jobNorm.title = usajob.PositionTitle;
-        jobNorm.company = usajob.OrganizationName;
-        jobNorm.location = {
-            city: usajob.PositionLocation[0].LocationName,
-            country: usajob.PositionLocation[0].CountryCode,
-            lat: usajob.PositionLocation[0].Longitude,
-            long: usajob.PositionLocation[0].Latitude,
+    function normalizeUSAJob(usaJob) {
+        let job = {};
+        job.title = usaJob.PositionTitle || "N/A";
+        job.company = usaJob.OrganizationName || "N/A";
+        job.location = {
+            city: usaJob.PositionLocation[0].LocationName || "N/A",
+            country: usaJob.PositionLocation[0].CountryCode || "N/A",
+            lat: usaJob.PositionLocation[0].Longitude || "N/A",
+            long: usaJob.PositionLocation[0].Latitude || "N/A",
 
         }
-
-        jobNorm.url = usajob.PositionURI;
-        jobNorm.salaryMin = usajob.PositionRemuneration[0].MinimumRange;
-        jobNorm.salaryMax = usajob.PositionRemuneration[0].MaximumRange;
-        jobNorm.description = usajob.UserArea.Details.JobSummary;
-        // jobNorm.qualification = usajob.QualificationSummary;
-        // jobNorm.startDate = usajob.PublicationStartDate;
-        // jobNorm.closeDate = usajob.ApplicationCloseDate;
-        return jobNorm;
+        job.url = usaJob.PositionURI || "N/A";
+        job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange || "N/A";
+        job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange || "N/A";
+        job.description = usaJob.UserArea.Details.JobSummary || "N/A";
+        // job.qualification = usaJob.QualificationSummary;
+        // job.startDate = usaJob.PublicationStartDate;
+        // job.closeDate = usaJob.ApplicationCloseDate;
+        return job;
 
     }
 
     function govApiCall() {
         const USAJobs = [];
         const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
-        $.ajax({
+        return $.ajax({
             headers: {
                 'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
             },
             url: BASEURL_USAJOBS,
             data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75 },
             method: "GET"
-        }).then(function (jobs) {
-            console.log(jobs);
-            const resultList = jobs.SearchResult.SearchResultItems.map(function (result) {
-                return normalizeJob(result.MatchedObjectDescriptor);
-            });
-            console.log(resultList);
-            $("#main").html(jobDisplay(resultList[0]));
-            return resultList;
-        }).catch(function (err) {
-            console.log(error);
         })
+
     }
 
 
+    //privateApiCall();
+    const jobResults = govApiCall();
+    const jobSearchPromise = [privateApiCall(), govApiCall()];
+    Promise.all(jobSearchPromise).then(function (jobResults) {
+        console.log(jobResults);
+        const privateJobResults = jobResults[0].results.map(function (privateJob) {
+            return normalizePrivateJob(privateJob);
+        });
+
+        const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
+            return normalizeUSAJob(govJob.MatchedObjectDescriptor);
+        });
+        console.log(privateJobResults);
+        console.log("----------------------------------------");
+        console.log(govJobResults);
+
+        //display results in the DOM
+        let privateCounter = 0;
+        let govCounter = 0;
+        $("#main").html(jobDisplay(privateJobResults[0]));
+        $("#main").on("click", ".yesBtn", function () {
+            privateCounter++;
+
+            let uniqueKey;
+
+            do {
+                uniqueKey = Math.floor(Math.random() * 100000000000)
+                //console.log(uniqueKey)
+                //console.log(storedRefs.includes(uniqueKey))
+            } while (storedRefs.includes(uniqueKey))
+
+            storedRefs.push(uniqueKey);
+
+            firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(privateJobResults[privateCounter]);
+
+            firebaseData.ref(`${userDirectory}/userData`).set({
+                username: userDirectory,
+                stored: storedRefs
+            })
+
+            //condition to get results from privateJobResults array or govJobResults
+            $("#main").html(jobDisplay(privateJobResults[privateCounter]))
+
+        })
+        $("#main").on("click", ".noBtn", function () {
+            privateCounter++;
+            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+        })
 
 
-
-    $(document).ready(function () {
-
-        //privateApiCall();
-        const jobResults = govApiCall();
-
-
+    }).catch(function (err) {
+        console.log(err);
     })
 
 
 
+})
 
 
 
-});
+
