@@ -3,10 +3,10 @@
 $(document).ready(function () {
     //console.log( "ready!" );
 
-
+    
 
     // Initialize Firebase
-    var config = {
+    const config = {
         apiKey: "AIzaSyDPTi1BfLqpqxdT1RvD-kLylgoq_JDhWlU",
         authDomain: "team-red-212d0.firebaseapp.com",
         databaseURL: "https://team-red-212d0.firebaseio.com",
@@ -21,17 +21,31 @@ $(document).ready(function () {
 
 
     function signIn(email, password) {
-        console.log(`email: ${email} password: ${password}`);
+        //console.log(`email: ${email} password: ${password}`);
         firebaseApp.signInWithEmailAndPassword(email, password).catch(error => {
             signInError();
         });
-    }
+        firebaseApp.onAuthStateChanged(function(user) {
+            if (user) {
+              window.location.href = "index.html";
+            } else {
+              // No user is signed in.
+            }
+          });
+            }
     function signUp(email, password) {
-        console.log(`email: ${email} password: ${password}`);
+        //console.log(`email: ${email} password: ${password}`);
         firebaseApp.createUserWithEmailAndPassword(email, password).catch(error => {
             $(".bad-stuff").text(error.message);
             //console.log(error);
         });
+        firebaseApp.onAuthStateChanged(function(user) {
+            if (user) {
+              window.location.href = "index.html";
+            } else {
+              // No user is signed in.
+            }
+          });
     }
 
     function signInError () {
@@ -99,4 +113,6 @@ $(document).ready(function () {
             status: hasRun
         }
     }
+
+
 });
