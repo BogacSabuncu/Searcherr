@@ -2,36 +2,39 @@ function normalizePrivateJob(originalJob) {
     const job = {};
     job.location = {};
 
-    job.title = originalJob.title;
-    job.salaryMin = originalJob.salary_min;
-    job.salaryMax = originalJob.salary_max;
-    job.url = originalJob.redirect_url;
-    job.company = originalJob.company.display_name;
-    job.description = originalJob.description;
-    job.location.country = originalJob.location.area[0];
-    job.location.city = originalJob.location.area[1];
-    job.location.lat = originalJob.latitude;
-    job.location.long = originalJob.longitude;
+    //gets all the necesarry information out of the API call and assigns it to the object
+    job.title = originalJob.title || "N/A"; //Job Title
+    job.salaryMin = originalJob.salary_min || "N/A"; //minimum salary
+    job.salaryMax = originalJob.salary_max || "N/A"; //maximum salary
+    job.url = originalJob.redirect_url || "N/A"; //Url for the Job
+    job.company = originalJob.company.display_name || "N/A"; //company name
+    job.description = originalJob.description || "N/A"; //job description
+    job.location.country = originalJob.location.area[0] || "N/A"; //country
+    job.location.city = originalJob.location.area[1] || "N/A"; //city
+    job.location.lat = originalJob.latitude || "N/A"; //coordinates
+    job.location.long = originalJob.longitude || "N/A"; //coordinates
 
     return job;
 }
 
-function privateApiCall() {
+function privateApiCall(pageCount) {
     let appId = "0cbadb14"; //app id for adzuna
     let key = "64d8e2d23b6325105d8459f517395077";//key for adzuna
-    let jobTitle = "javascript developer";//job search title
-    let jobLocation = "london";//job Location
+    let jobTitle = "javascript developer";//Gonna be user input later
+    let jobLocation = "london";//Gonna be user Input later
 
+    //parameters for the ajax URL
     const queryParams = $.param({
         "app_id": appId,
         "app_key": key,
-        "results_per_page": 50,
+        "results_per_page": 5,
         "content-type": "application/json",
         "what": jobTitle,
         "where": jobLocation
     });
 
-    let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/1?${queryParams}`;
+    //ajax call
+    let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/${pageCount}?${queryParams}`;
     return $.ajax({
         url: apiURL,
         method: "GET"
@@ -40,22 +43,6 @@ function privateApiCall() {
 }
 
 function jobDisplay(job) {
-    // return (`
-    // <div>
-    //     <h2>Title: ${job.title}</h2>
-    //     <h2> Company: ${job.company}</h2>
-    //     <h4>location: ${job.location.country} ${job.location.city}</h4>
-    //     <h4>Company: ${job.company}</h4>
-    //     <h4>Salaray Min: ${job.salaryMin}</h4>
-    //     <h4>Salaray Min:${job.salaryMax}</h4>
-    //     <a href=${job.url}> Click here to apply </a>
-    //     <h5>Description:</h5>
-    //     <p style="font-size:1em"> ${job.description}</p>
-
-    // </div>
-    // <button class="yesBtn">Yes</button>
-    // <button class="noBtn">No</button>
-    // `);
     return (`
     <div class="cardJob">
         <div class="card">
@@ -85,9 +72,8 @@ function jobDisplay(job) {
     `);
 
 }
-function displayModal(jobDescription){
-    
-}
+
+
 function normalizeUSAJob(usaJob) {
     let job = {};
     job.title = usaJob.PositionTitle;
@@ -104,22 +90,20 @@ function normalizeUSAJob(usaJob) {
     job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange;
     job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange;
     job.description = usaJob.UserArea.Details.JobSummary;
-    // job.qualification = usaJob.QualificationSummary;
-    // job.startDate = usaJob.PublicationStartDate;
-    // job.closeDate = usaJob.ApplicationCloseDate;
+
     return job;
 
 }
 
-function govApiCall() {
-    const USAJobs = [];
+function govApiCall(pageCount) {
+    //const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
     return $.ajax({
         headers: {
             'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
         },
         url: BASEURL_USAJOBS,
-        data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75 },
+        data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75, ResultsPerPage: 5, Page: pageCount },
         method: "GET"
     })
 
@@ -127,54 +111,44 @@ function govApiCall() {
 
 
 
+function getJobs(pageCount) {
 
+    const jobSearchPromise = [privateApiCall(pageCount), govApiCall(pageCount)]; //gets the promises and puts them into an array
 
-$(document).ready(function () {
-
-    //privateApiCall();
-    const jobResults = govApiCall();
-    const jobSearchPromise = [privateApiCall(), govApiCall()];
-    Promise.all(jobSearchPromise).then(function (jobResults) {
+    //waits all the promises to resolve and returns a promise out the function 
+    return Promise.all(jobSearchPromise).then(function (jobResults) {
         console.log(jobResults);
+
+        //normalizes the objects and maps them into an array
         const privateJobResults = jobResults[0].results.map(function (privateJob) {
             return normalizePrivateJob(privateJob);
         });
 
+        //normalizes the objects and maps them into an array
         const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
             return normalizeUSAJob(govJob.MatchedObjectDescriptor);
         });
+
+
         console.log(privateJobResults);
         console.log("----------------------------------------");
         console.log(govJobResults);
 
-        //display results in the DOM
-        let privateCounter = 0;
-        let govCounter = 0;
-        $("#main").html(jobDisplay(privateJobResults[0]));
-        $("#main").on("click", ".yesBtn", function () {
-            privateCounter++;
-            //condition to get results from privateJobResults array or govJobResults
-            $("#main").html(jobDisplay(privateJobResults[privateCounter]));
+        //concats two arrays into one    
+        const allJobs = privateJobResults.concat(govJobResults);
 
-        })
-        $("#main").on("click", ".noBtn", function () {
-            privateCounter++;
-            $("#main").html(jobDisplay(govJobResults[privateCounter]));
-        })
+        console.log(pageCount);
 
-        $("#main").on("click", ".hideShowJobBtn", function () {
-            $(".modal-body").html(privateJobResults[privateCounter].description);
-            $("#jobModal").modal("toggle");
-        })
-
-
+        return allJobs;//returns the array as the argument of the next function 
     }).catch(function (err) {
         console.log(err);
-    })
+    });
+}
 
 
 
-    //////
+$(document).ready(function () {
+
     $("#jobSubmit").click(function(event){
         event.preventDefault();
         const jobTitle = $("#jobtitle").val();
@@ -190,58 +164,56 @@ $(document).ready(function () {
         const numberofresults = $("#numberofresults").val();
     console.log(numberofresults);
 
+    });
+
+    let pageCount = 1;//page of the API call
+
+    //runs the getJobs function to get the arrays 
+    getJobs(pageCount).then(function (allJobs) {
+
+        //display results in the DOM
+        let allJobCounter = 0;
+        //display the first screen
+        $("#main").html(jobDisplay(allJobs[allJobCounter]));
+
+        $("#main").on("click", ".hideShowJobBtn", function () {
+            $(".modal-body").html(allJobs[allJobCounter].description);
+            $("#jobModal").modal("toggle");
+        })
+
+        $("#main").on("click", ".yesBtn", function () {
+            if (allJobCounter === allJobs.length) {
+                pageCount++;
+                getJobs(pageCount).then(function (allJobs) {
+                    allJobCounter = 0;
+
+
+                    $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    allJobCounter++;
+                });
+            }
+            else {
+                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                allJobCounter++;
+            }
+
+        })
+        $("#main").on("click", ".noBtn", function () {
+            if (allJobCounter === allJobs.length) {
+                pageCount++;
+                getJobs(pageCount).then(function (allJobs) {
+                    allJobCounter = 0;
+
+
+                    $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    allJobCounter++;
+                });
+            }
+            else {
+                $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                allJobCounter++;
+            }
+
+        });
     })
-    
-        
-
-
-
-    ///////
-    
-    //privateApiCall();
-//    const jobResults =  govApiCall();
-//    const jobSearchPromise = [privateApiCall(), govApiCall()];
-//    Promise.all(jobSearchPromise).then(function(jobResults){
-//        console.log(jobResults);
-//        const privateJobResults = jobResults[0].results.map(function (privateJob) {
-//              return normalizePrivateJob(privateJob);
-//         });
-
-//         const govJobResults = jobResults[1].SearchResult.SearchResultItems.map(function (govJob) {
-//             return normalizeUSAJob(govJob.MatchedObjectDescriptor);
-//         });
-//         console.log(privateJobResults);
-//         console.log("----------------------------------------");
-//         console.log(govJobResults);
-        
-//         //display results in the DOM
-//         let privateCounter = 0;
-//         let govCounter = 0;
-//         $("#main").html(jobDisplay(privateJobResults[0]));
-//         $("#main").on("click", ".yesBtn", function(){
-//             privateCounter++;
-//             //condition to get results from privateJobResults array or govJobResults
-//             $("#main").html(jobDisplay(privateJobResults[privateCounter]));
-            
-//         })
-//         $("#main").on("click", ".noBtn", function(){
-//             privateCounter++;
-//             $("#main").html(jobDisplay(privateJobResults[privateCounter]));
-//         })
-
-
-//    }).catch(function(err){
-//        console.log(err);
-//    })
-   
-   
-   
 })
-
-
-
-
-
-
-
-
