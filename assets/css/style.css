@@ -43,6 +43,7 @@ body {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* */
 .cardJob{
     width: 70%;
@@ -55,6 +56,8 @@ body {
     float: right;
 }
 =======
+=======
+>>>>>>> a1577d61c00446638eae022d5aa8d8d3547b323a
 @media only screen and (min-width: 320px){
     .display-4 {
         font-size: 25px; 
@@ -83,4 +86,18 @@ body {
 
 } 
 
+<<<<<<< HEAD
 >>>>>>> 718e278683e0d00c9ec2772fcac44a82a17c942b
+=======
+/* */
+.cardJob{
+    width: 70%;
+    margin:0 auto;
+}
+.yesBtn{
+    float: left;
+}
+.noBtn{
+    float: right;
+}
+>>>>>>> a1577d61c00446638eae022d5aa8d8d3547b323a

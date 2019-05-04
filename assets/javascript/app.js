@@ -132,6 +132,7 @@ function govApiCall() {
 $(document).ready(function () {
 
     //privateApiCall();
+    const jobResults = govApiCall();
     const jobSearchPromise = [privateApiCall(), govApiCall()];
     Promise.all(jobSearchPromise).then(function (jobResults) {
         console.log(jobResults);
