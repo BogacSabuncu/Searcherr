@@ -158,7 +158,7 @@ function executeGetJobs(title, location){
 
         $("#main").on("click", ".hideShowJobBtn", function () {
             $(".modal-body").html(allJobs[allJobCounter].description);
-            $("#jobModal").modal("toggle");
+            $("#jobModal").modal("toggle", {keyboard: true});
         })
 
         $("#main").on("click", ".yesBtn", function () {
@@ -203,9 +203,9 @@ $(document).ready(function () {
 
     $("#jobSubmit").click(function(event){
         event.preventDefault();
-        const jobTitle = $("#jobtitle").val();
+        const jobTitle = $("#jobtitle").val().trim();
         console.log(jobTitle);
-        const location = $("#location").val();
+        const location = $("#location").val().trim();
         console.log(location);
         const field = $("#field").val();
         console.log(field);
