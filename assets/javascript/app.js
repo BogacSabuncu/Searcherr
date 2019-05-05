@@ -44,7 +44,7 @@ function privateApiCall(pageCount, title, location) {
 
 function jobDisplay(job) {
     return (`
-    <div class="cardJob">
+    <div class="cardJob animated fadeInRight faster">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">${job.title}</h3>
@@ -198,6 +198,11 @@ function executeGetJobs(title, location){
     })
 }
 
+function loadData(){
+    $("#main").html(`<div class="LoadingData">
+        <img src="https://media.giphy.com/media/kodQslB005JIc/giphy-downsized.gif" alt="data Loading">
+    </div>`);
+}
 
 $(document).ready(function () {
 
@@ -218,7 +223,7 @@ $(document).ready(function () {
         if(!jobTitle || !location){
             console.log("enter text seearch");
         }else{
-            //hepful function to call getjobs();, title, location
+        loadData(); // display loading gif imagine while waiting for data to be laod. 
         executeGetJobs(jobTitle, location);
         }
         
