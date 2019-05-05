@@ -17,11 +17,11 @@ function normalizePrivateJob(originalJob) {
     return job;
 }
 
-function privateApiCall(pageCount) {
+function privateApiCall(pageCount, title, location) {
     let appId = "0cbadb14"; //app id for adzuna
     let key = "64d8e2d23b6325105d8459f517395077";//key for adzuna
-    let jobTitle = "javascript developer";//Gonna be user input later
-    let jobLocation = "london";//Gonna be user Input later
+    let jobTitle = title;//Gonna be user input later
+    let jobLocation = location;//Gonna be user Input later
 
     //parameters for the ajax URL
     const queryParams = $.param({
@@ -95,7 +95,7 @@ function normalizeUSAJob(usaJob) {
 
 }
 
-function govApiCall(pageCount) {
+function govApiCall(pageCount, title, location) {
     //const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
     return $.ajax({
@@ -103,7 +103,7 @@ function govApiCall(pageCount) {
             'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
         },
         url: BASEURL_USAJOBS,
-        data: { PositionTitle: "full stack developer", location: "Atlanta", Radius: 75, ResultsPerPage: 5, Page: pageCount },
+        data: { PositionTitle: title, LocationName:location, Radius: 75, ResultsPerPage: 5, Page: pageCount },
         method: "GET"
     })
 
@@ -111,9 +111,9 @@ function govApiCall(pageCount) {
 
 
 
-function getJobs(pageCount) {
+function getJobs(pageCount, title, location) {
 
-    const jobSearchPromise = [privateApiCall(pageCount), govApiCall(pageCount)]; //gets the promises and puts them into an array
+    const jobSearchPromise = [privateApiCall(pageCount, title, location), govApiCall(pageCount, title, location)]; //gets the promises and puts them into an array
 
     //waits all the promises to resolve and returns a promise out the function 
     return Promise.all(jobSearchPromise).then(function (jobResults) {
@@ -145,32 +145,12 @@ function getJobs(pageCount) {
     });
 }
 
-
-
-$(document).ready(function () {
-
-    $("#jobSubmit").click(function(event){
-        event.preventDefault();
-        const jobTitle = $("#jobtitle").val();
-    console.log(jobTitle);
-        const location = $("#location").val();
-    console.log(location);
-        const field = $("#field").val();
-    console.log(field);
-        const dateposted = $("#dateposted").val();
-    console.log(dateposted);
-        const salary = $("#salary").val();
-    console.log(salary);
-        const numberofresults = $("#numberofresults").val();
-    console.log(numberofresults);
-
-    });
-
+function executeGetJobs(title, location){
+    /*comment from samuel. This code is working well but you to check when any result return [] array!. it is throw an error */
     let pageCount = 1;//page of the API call
 
     //runs the getJobs function to get the arrays 
-    getJobs(pageCount).then(function (allJobs) {
-
+    getJobs(pageCount, title, location).then(function (allJobs) {
         //display results in the DOM
         let allJobCounter = 0;
         //display the first screen
@@ -184,7 +164,7 @@ $(document).ready(function () {
         $("#main").on("click", ".yesBtn", function () {
             if (allJobCounter === allJobs.length) {
                 pageCount++;
-                getJobs(pageCount).then(function (allJobs) {
+                getJobs(pageCount, title, location).then(function (allJobs) {
                     allJobCounter = 0;
 
 
@@ -201,7 +181,7 @@ $(document).ready(function () {
         $("#main").on("click", ".noBtn", function () {
             if (allJobCounter === allJobs.length) {
                 pageCount++;
-                getJobs(pageCount).then(function (allJobs) {
+                getJobs(pageCount, title, location).then(function (allJobs) {
                     allJobCounter = 0;
 
 
@@ -216,4 +196,34 @@ $(document).ready(function () {
 
         });
     })
+}
+
+
+$(document).ready(function () {
+
+    $("#jobSubmit").click(function(event){
+        event.preventDefault();
+        const jobTitle = $("#jobtitle").val();
+        console.log(jobTitle);
+        const location = $("#location").val();
+        console.log(location);
+        const field = $("#field").val();
+        console.log(field);
+        const dateposted = $("#dateposted").val();
+        console.log(dateposted);
+        const salary = $("#salary").val();
+        console.log(salary);
+        const numberofresults = $("#numberofresults").val();
+        console.log(numberofresults);
+        if(!jobTitle || !location){
+            console.log("enter text seearch");
+        }else{
+            //hepful function to call getjobs();, title, location
+        executeGetJobs(jobTitle, location);
+        }
+        
+
+    });
+
+    
 })
