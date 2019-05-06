@@ -2,125 +2,158 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Project</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="assets/javascript/app.js"></script>
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Project</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="assets/javascript/app.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/reset.css">
 </head>
-<div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-4">JOB SEARCH for humans</h1>
-          <p class="lead">Best job search known to man.<a href="login.html" class="login-link">login</a></p>
-        </div>
-      </div>
-  </head>
 
-  <body>
-    <div class="container" id = "main"> 
+
+<body>
+
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="display4 text-center">
+          <h1 >JOB SEARCH</h1>
+      </div>
+    </div>
+    <!-- <p class="lead">Best job search known to man.<a href="login.html" class="login-link">login</a></p>
+      NavBar -->
+      <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+          <a class="navbar-brand" href="">JobSearch</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link " href="#savedjobs">Saved Jobs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#mysearches">My Searches</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#account">Account</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="login.html" id="login-link">Sign In</a>
+              </li>
+              <li class="nav-item" id="sign-up-link">
+                <a class="nav-link" href="login.html">Sign Up</a>
+              </li>
+              
+            </ul>
+          </div>
+        </nav>
+        <!-- NavBar -->
+  </div>
+  
+  <div class="container" id="main" >
+    <div class="searchParamter">
+        <div class="requiredParameter">
             <div class="row">
                 <div class="col-12 col-sm-6 p-1 p-sm-2">
-                    <div class="input-group input-group-lg">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg"
-                          >Job Title</span
-                        >
-                      </div>
-                      <input id="jobtitle"
-                        type="text"
-                        class="form-control"
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-lg"
-                      />
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">Job Title</span>
                     </div>
+                    <input id="jobtitle" type="text" class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg" />
+                  </div>
                 </div>
                 <div class="col-12 col-sm-6 p-1 p-sm-2">
-                        <div class="input-group input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-lg"
-                              >Location</span
-                            >
-                          </div>
-                          <input id="location"
-                            type="text"
-                            class="form-control"
-                            aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-lg"
-                          />
-                        </div>
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">Location</span>
                     </div>
+                    <input id="location" type="text" class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg" />
+                  </div>
+                </div>
+              </div>  
+              <h5 data-toggle="collapse" data-target="#moreOptions" class="p-2">More options >>></h5> 
+        </div>
+        <div class="optionalParameter  collapse" id="moreOptions" >
+            <div class="row">
+                <div class="col-12 col-sm-6 p-1">
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">Field</span>
+                    </div>
+                    <input id="field" type="text" class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg" />
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 p-1">
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">Date Posted</span>
+                    </div>
+                    <input id="dateposted" type="text" class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-6 p-1">
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg">Salary</span>
+                    </div>
+                    <input id="salary" type="text" class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg" />
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 p-1">
+                  <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-lg ">Number of Results</span>
+                    </div>
+                    <input id="numberofresults" type="text" class="form-control" aria-label="Sizing example input"
+                      aria-describedby="inputGroup-sizing-lg" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-12 col-sm-4 p-1" >
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheck1" />
+                      <label class="custom-control-label" for="customCheck1">Full Time</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4 p-1">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                      <label class="custom-control-label" for="customCheck2">Part Time</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4 p-1">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="customCheck3" />
+                      <label class="custom-control-label" for="customCheck3">Temporary</label>
+                    </div>
+                  </div>
+                </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-primary btn-lg btn-block" id="jobSubmit">Submit</button>
             </div>
-     <div class="row">
-            <div class="col-12 col-sm-6 p-1">
-                    <div class="input-group input-group-lg">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg"
-                          >Field</span
-                        >
-                      </div>
-                      <input id="field"
-                        type="text"
-                        class="form-control"
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-lg"
-                      />
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 p-1">
-                        <div class="input-group input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-lg"
-                              >Date Posted</span
-                            >
-                          </div>
-                          <input id="dateposted"
-                            type="text"
-                            class="form-control"
-                            aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-lg"
-                          />
-                        </div>
-                    </div>
-      </div>
-      <div class="row">
-            <div class= "col-12 col-sm-6 p-1">
-                    <div class="input-group input-group-lg">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-lg"
-                          >Salary</span
-                        >
-                      </div>
-                      <input id="salary"
-                        type="text"
-                        class="form-control"
-                        aria-label="Sizing example input"
-                        aria-describedby="inputGroup-sizing-lg"
-                      />
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 p-1">
-                        <div class="input-group input-group-lg">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-lg"
-                              >Number of Results</span
-                            >
-                          </div>
-                          <input id="numberofresults"
-                            type="text"
-                            class="form-control"
-                            aria-label="Sizing example input"
-                            aria-describedby="inputGroup-sizing-lg"
-                          />
-                        </div>
-                    </div>
-      </div>
-     <!-- <div class="row">
+              
+          </div>
+    </div>
+    
+    
+    <!-- <div class="row">
             <div class="col"-6>
                     <div class="input-group input-group-lg">
                       <div class="input-group-prepend">
@@ -152,79 +185,35 @@
                         </div>
                     </div>
       </div>-->
-      <div class="row">
-          <div class="col"-3>
-                <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="customCheck1"
-                        />
-                        <label class="custom-control-label" for="customCheck1"
-                          >Full Time</label
-                        >
-                      </div>
-          </div>
-          <div class="col"-3>
-                <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="customCheck1"
-                        />
-                        <label class="custom-control-label" for="customCheck1"
-                          >Part Time</label
-                        >
-                      </div>
-          </div>
-          <div class="col"-3>
-                <div class="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          class="custom-control-input"
-                          id="customCheck1"
-                        />
-                        <label class="custom-control-label" for="customCheck1"
-                          >Temporary</label
-                        >
-                      </div>
-          </div>
-          <div class="col"-3>
-                <div class="row">
-                        <button type="button" class="btn btn-primary btn-lg" id="jobSubmit">Submit</button>
-                      </div>  
-          </div>
-       
-      </div>
-    </div>
-      <div class="row">
-        
-      </div>
-        
     
+    
+    
+  </div>
+  
 
-    <!-- modal call here -->
-    <div class="modal" id="jobModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Job Description</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-          
-          <!-- Modal body -->
-          <div class="modal-body">
-                jod description here 
-          </div>
-          
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-          </div>
-          
+
+  <!-- modal call here -->
+  <div class="modal fade" id="jobModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title animated fadeInRight faster">Job Description</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
+
+        <!-- Modal body -->
+        <div class="modal-body animated zoomIn faster">
+          jod description here
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
       </div>
     </div>
+  </div>
 </body>
 
 </html>

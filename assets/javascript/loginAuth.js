@@ -42,7 +42,7 @@ $(document).ready(function () {
                     }
                 });
 
-                window.location.href = "index.html";
+                //window.location.href = "index.html";
 
             } else {
                 // No user is signed in.
@@ -59,7 +59,19 @@ $(document).ready(function () {
             const user = firebaseApp.currentUser
             console.log(user)
             if (user) {
-                window.location.href = "index.html";
+
+                userDirectory = user.email.split("@")[0];
+
+                localStorage.setItem("currentUser", userDirectory);
+
+                firebaseData.ref(`${userDirectory}`).set({
+                    userData: {
+                        username: user.email,
+                        savedJobRefs: []
+                    }
+                });
+
+                //window.location.href = "index.html";
 
                 console.log(user.email)
             } else {
@@ -90,7 +102,7 @@ $(document).ready(function () {
             }
 
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             signIn(userName, password);
             //signUpSetup();
         }

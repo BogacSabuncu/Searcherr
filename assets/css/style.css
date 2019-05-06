@@ -1,40 +1,48 @@
+*{
+    box-sizing: border-box;
+}
+
 body {
    background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg)
 }
-.container {
-    /*font-weight: 900;
-    font-size: 25px;*/
-    
-    
-}
+
 .jumbotron {
+    height: 25vh;
     color: black;
     border-style: solid;
-    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg)       
+    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg);
+    background-size: cover;  
+    padding-top: 20px;
+    padding-bottom: 20px;       
 }
 
 
 
 
-.display-4 {
-    font-size: 15px;
-    color: rgb(201, 197, 197);
-    border-style: solid;
-    background-color: grey;
-    background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80);
-      
+.display4 {
+    margin-bottom: 20px;
+    height: 100%;
+    background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80); 
+    border-radius: 10px;
+    font-size: 1.5em;
+    padding: 10px;
 }
 
 
-.lead {
-    font-size: 20px;
-    color: rgb(201, 197, 197);;
-    border-style: solid;
-    background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
 
+
+#main{
+    margin: 20px auto;
+    border: 1px solid black;
+}
+.searchParamter{
+    padding: 20px;
+    width:100%;
+    margin:20px auto;
+    border:1px solid black;
 }
 
-
+/* login   */
 .login-link {
     float: right;
     margin-right: 10px;
@@ -42,8 +50,12 @@ body {
     
 }
 
+/* display job*/
+.LoadingData{
+    width: 80%;
+    margin: 0 auto;
+}
 
-/* */
 .cardJob{
     width: 70%;
     margin:0 auto;
@@ -55,31 +67,37 @@ body {
     float: right;
 }
 
+
+
 @media only screen and (min-width: 320px){
-    .display-4 {
-        font-size: 25px; 
-    }
+    .display4 {
+        font-size: 2em;
+    } 
+
 
 }
 
 @media only screen and (min-width: 576px) {
-    .display-4 {
-        font-size: 45px; 
+    .searchParamter{
+        width:95%;
+    
     }
 
 } 
 
 @media only screen and (min-width: 768px) {
-    .display-4 {
-        font-size: 65px; 
+    .display4 {
+        font-size: 2.5em;
+    }
+    .searchParamter{
+        width:80%;
+    
     }
 
 } 
 
 @media only screen and (min-width: 992px) {
-    .display-4 {
-        font-size: 80px; 
-    }
+    
 
 } 
 
