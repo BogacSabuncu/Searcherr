@@ -42,7 +42,7 @@ $(document).ready(function () {
                     }
                 });
 
-                //window.location.href = "index.html";
+                window.location.href = "index.html";
 
             } else {
                 // No user is signed in.
@@ -71,7 +71,7 @@ $(document).ready(function () {
                     }
                 });
 
-                //window.location.href = "index.html";
+                window.location.href = "index.html";
 
                 console.log(user.email)
             } else {

@@ -1,3 +1,9 @@
+
+let firebaseAuth;
+let firebaseData;
+
+let userDirectory;
+
 function initFirebase() {
 
     //Given to you by the firebase console
@@ -16,12 +22,11 @@ function initFirebase() {
 
 
     //Initializes services we use
-    const firebaseAuth = firebase.auth()
-    const firebaseData = firebase.database();
+    firebaseAuth = firebase.auth()
+    firebaseData = firebase.database();
+    
+    userDirectory = localStorage.getItem("currentUser");
 
-    const storedRefs = [firebaseData.ref(userDirectory)];
-
-    var userDirectory = localStorage.getItem("currentUser");
 
 
     //Checks if you are logged in on your machine
@@ -79,7 +84,7 @@ function privateApiCall(pageCount, title, location) {
     });
 
     //ajax call
-    let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/${pageCount}?${queryParams}`;
+    let apiURL = `https://api.adzuna.com/v1/api/jobs/us/search/${pageCount}?${queryParams}`;
     return $.ajax({
         url: apiURL,
         method: "GET"
@@ -160,6 +165,8 @@ function getJobs(pageCount, title, location) {
         const allJobs = privateJobResults.concat(govJobResults);
 
         console.log(pageCount);
+        console.log("allJobs")
+        console.log(allJobs)
 
         return allJobs;//returns the array as the argument of the next function
 
@@ -170,6 +177,7 @@ function getJobs(pageCount, title, location) {
 
 
 function jobDisplay(job) {
+    if (job) {
     return (`
         <div class="cardJob animated fadeInRight faster">
             <div class="card">
@@ -197,6 +205,28 @@ function jobDisplay(job) {
             <p> ${job.description}</p>
          </div>
         `);
+    } else {
+        return `
+        <div class="cardJob animated fadeInRight faster">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Oops!</h3>
+            </div>
+            <div class="card-body">
+ 
+                  <h4>We've run out of available jobs.</h4>
+                  <h3>Please search again.</h3>
+
+              </div>
+              <div class="card-footer">
+                    <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                    <button class="noBtn btn btn-lg btn-danger">No</button>
+                </div>
+            </div>
+ 
+         </div>
+        `
+    }
 
 }
 
@@ -228,6 +258,8 @@ function executeGetJobs(title, location) {
                     allJobs = nextJobs;
 
 
+
+
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
                     allJobCounter++;
 
@@ -236,6 +268,8 @@ function executeGetJobs(title, location) {
             } else {
 
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
+
+                const storedRefs = [firebaseData.ref(`${userDirectory}/userData`).val(stored)];
 
                 allJobCounter++;
 
@@ -265,6 +299,9 @@ function executeGetJobs(title, location) {
                     allJobCounter = 0;
 
                     allJobs = nextJobs;
+
+                    console.log("allJiobs")
+                    console.log(allJobs)
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
                     allJobCounter++;
