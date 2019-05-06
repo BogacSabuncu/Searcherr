@@ -44,31 +44,36 @@ function privateApiCall(pageCount, title, location) {
 
 function jobDisplay(job) {
     return (`
-    <div class="cardJob animated fadeInRight faster">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">${job.title}</h3>
-            </div>
-            <div class="card-body">
-            
-                <h4>location: ${job.location.country} ${job.location.city}</h4>
-                <h4>Company: ${job.company}</h4>
-                <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
-                
-                <a href=${job.url} class="card-link"> Click here to apply </a><br/>
-                
-                <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
-            </div>
-            <div class="card-footer">
-                <button class="yesBtn btn btn-lg btn-primary">Yes</button>
-                <button class="noBtn btn btn-lg btn-danger">No</button>
+    <div class="row">
+        <div class="col-12 col-6">
+            <div class="cardJob animated fadeInRight faster">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">${job.title}</h3>
+                    </div>
+                    <div class="card-body animated fadeInLeft faster">
+                    
+                        <h4>location: ${job.location.country} ${job.location.city}</h4>
+                        <h4>Company: ${job.company}</h4>
+                        <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+                        
+                        <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                        
+                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                    </div>
+                    <div class="card-footer">
+                        <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                        <button class="noBtn btn btn-lg btn-danger">No</button>
+                    </div>
+                </div>
             </div>
         </div>
-
+        <div class="col-12 col-6">
+            <div id="googleMap" style="width:100%;height:400px;"></div>
+        </div>
     </div>
-    <div class="hideShowJobDiv" style="display: none;">
-        <p> ${job.description}</p>
-     </div>
+   
+    
     `);
 
 }
@@ -100,7 +105,7 @@ function govApiCall(pageCount, title, location) {
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
     const data ={
         PositionTitle: title,
-        LocationName:location,
+        LocationName: location,
         Radius: 75,
         PositionSchedule: 1,  //part-time, full-time, temp
         ResultsPerPage: 5,
