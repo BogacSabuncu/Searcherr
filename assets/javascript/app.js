@@ -69,7 +69,7 @@ function jobDisplay(job) {
             </div>
         </div>
         <div class="col-12 col-6">
-            <div id="googleMap" style="width:100%;height:400px;"></div>
+            <div id="displayMap" style="width:100%;height:400px;"></div>
         </div>
     </div>
    
@@ -220,8 +220,16 @@ function loadData(){
     </div>`);
 }
 
+function initMap(location) {
+    map = new google.maps.Map(document.getElementById("displayMap"), {
+     center:new google.maps.LatLng(51.508742,-0.120850),
+     zoom:10,
+     MapTypeId: google.maps.MapTypeId.TERRAIN
+   });
+}
+
 $(document).ready(function () {
-    
+
     $("#jobSubmit").click(function(event){
         event.preventDefault();
         const jobTitle = $("#jobtitle").val().trim();
@@ -241,6 +249,7 @@ $(document).ready(function () {
         }else{
         loadData(); // display loading gif imagine while waiting for data to be laod. 
         executeGetJobs(jobTitle, location);
+        initMap(location);
         }
         
 
