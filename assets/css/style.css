@@ -1,23 +1,28 @@
+*{
+    box-sizing: border-box;
+}
+
 body {
    background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg)
 }
 
 .jumbotron {
+    height: 20vh;
     color: black;
     border-style: solid;
-    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg)       
+    background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg);
+    background-size: cover;         
 }
 
 
 
 
-.display-4 {
-    font-size: 15px;
-    color: rgb(201, 197, 197);
-    border-style: solid;
-    background-color: grey;
-    background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80);
-      
+.display4 {
+    margin-top: -20px;
+    margin-bottom: 20px;
+    height: 100%;
+    background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80); 
+    border-radius: 10px;
 }
 
 
@@ -29,7 +34,11 @@ body {
 
 }
 
+#main{
+    padding-top: 20px;
+}
 
+/* login   */
 .login-link {
     float: right;
     margin-right: 10px;
@@ -37,12 +46,12 @@ body {
     
 }
 
+/* display job*/
 .LoadingData{
     width: 80%;
     margin: 0 auto;
 }
 
-/* */
 .cardJob{
     width: 70%;
     margin:0 auto;
@@ -55,30 +64,22 @@ body {
 }
 
 @media only screen and (min-width: 320px){
-    .display-4 {
-        font-size: 25px; 
-    }
+    
 
 }
 
 @media only screen and (min-width: 576px) {
-    .display-4 {
-        font-size: 45px; 
-    }
+    
 
 } 
 
 @media only screen and (min-width: 768px) {
-    .display-4 {
-        font-size: 65px; 
-    }
+    
 
 } 
 
 @media only screen and (min-width: 992px) {
-    .display-4 {
-        font-size: 80px; 
-    }
+    
 
 } 
 
