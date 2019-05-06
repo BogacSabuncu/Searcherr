@@ -105,7 +105,7 @@ function govApiCall(pageCount, title, location) {
         PositionSchedule: 1,  //part-time, full-time, temp
         ResultsPerPage: 5,
         Page: pageCount,
-        Fields: full
+        Fields: "full"
     }
     return $.ajax({
         headers: {
@@ -204,6 +204,8 @@ function executeGetJobs(title, location){
             }
 
         });
+    }).catch(function(err){
+        $("#main").html("<h1>Something went wrong!!!</h1>");
     })
 }
 
