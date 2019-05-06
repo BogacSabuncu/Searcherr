@@ -24,7 +24,7 @@ function initFirebase() {
     //Initializes services we use
     firebaseAuth = firebase.auth()
     firebaseData = firebase.database();
-    
+
     userDirectory = localStorage.getItem("currentUser");
 
 
@@ -37,7 +37,7 @@ function initFirebase() {
 
                 $("#sign-up-link").text(`Switch Account`);
                 $("#login-link").text(`${snapshot.val().userData.username}`);
-                
+
                 //console.log("display user object" + snapshot.val());
                 //console.log(snapshot.val());
             }
@@ -180,7 +180,7 @@ function getJobs(pageCount, title, location) {
 
 function jobDisplay(job) {
     if (job) {
-    return (`
+        return (`
         <div class="cardJob animated fadeInRight faster">
             <div class="card">
                 <div class="card-header">
@@ -271,26 +271,31 @@ function executeGetJobs(title, location) {
 
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
 
-                const storedRefs = [firebaseData.ref(`${userDirectory}/userData`).val(stored)];
+                let storedRefs;
 
-                allJobCounter++;
+                firebaseData.ref(`${userDirectory}/userData`).once("value").then(function (snapshot) {
+                    storedRefs = snapshot.val().stored ? snapshot.val().stored : [];
 
-                let uniqueKey;
+                    console.log(storedRefs)
+                    allJobCounter++;
 
-                do {
-                    uniqueKey = Math.floor(Math.random() * 100000000000)
-                    //console.log(uniqueKey)
-                    //console.log(storedRefs.includes(uniqueKey))
-                } while (storedRefs.includes(uniqueKey))
+                    let uniqueKey;
 
-                storedRefs.push(uniqueKey);
+                    do {
+                        uniqueKey = Math.floor(Math.random() * 100000000000)
+                        //console.log(uniqueKey)
+                        //console.log(storedRefs.includes(uniqueKey))
+                    } while (storedRefs.includes(uniqueKey))
 
-                firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
+                    storedRefs.push(uniqueKey);
 
-                firebaseData.ref(`${userDirectory}/userData`).set({
-                    username: userDirectory,
-                    stored: storedRefs
-                })
+                    firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
+
+                    firebaseData.ref(`${userDirectory}/userData`).set({
+                        username: userDirectory,
+                        stored: storedRefs
+                    })
+                });
             }
 
         })
