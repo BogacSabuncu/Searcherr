@@ -45,7 +45,7 @@ function privateApiCall(pageCount, title, location) {
 function jobDisplay(job) {
     return (`
     <div class="row">
-        <div class="col-12 col-6">
+        <div class="col-12">
             <div class="cardJob animated fadeInRight faster">
                 <div class="card">
                     <div class="card-header">
@@ -68,9 +68,7 @@ function jobDisplay(job) {
                 </div>
             </div>
         </div>
-        <div class="col-12 col-6">
-            <div id="displayMap" style="width:100%;height:400px;"></div>
-        </div>
+        
     </div>
    
     
@@ -162,14 +160,17 @@ function getJobs(pageCount, title, location) {
 function executeGetJobs(title, location){
     /*comment from samuel. This code is working well but you to check when any result return [] array!. it is throw an error */
     let pageCount = 1;//page of the API call
-
+    let map = initMap(location);
     //runs the getJobs function to get the arrays 
     getJobs(pageCount, title, location).then(function (allJobs) {
         //display results in the DOM
         let allJobCounter = 0;
+        
         //display the first screen
         $("#main").html(jobDisplay(allJobs[allJobCounter]));
-
+        //let locat = allJobs[allJobCounter].location
+        console.log(allJobs[allJobCounter]);
+        setmarker(map, allJobs[allJobCounter]);
         $("#main").on("click", ".hideShowJobBtn", function () {
             $(".modal-body").html(allJobs[allJobCounter].description);
             $("#jobModal").modal("toggle", {keyboard: true});
@@ -183,11 +184,13 @@ function executeGetJobs(title, location){
 
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    setmarker(map, allJobs[allJobCounter]);
                     allJobCounter++;
                 });
             }
             else {
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                setmarker(map, allJobs[allJobCounter]);
                 allJobCounter++;
             }
 
@@ -198,13 +201,14 @@ function executeGetJobs(title, location){
                 getJobs(pageCount, title, location).then(function (allJobs) {
                     allJobCounter = 0;
 
-
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    setmarker(map, allJobs[allJobCounter]);
                     allJobCounter++;
                 });
             }
             else {
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                setmarker(map, allJobs[allJobCounter]);
                 allJobCounter++;
             }
 
@@ -221,14 +225,68 @@ function loadData(){
 }
 
 function initMap(location) {
-    map = new google.maps.Map(document.getElementById("displayMap"), {
-     center:new google.maps.LatLng(51.508742,-0.120850),
-     zoom:10,
-     MapTypeId: google.maps.MapTypeId.TERRAIN
-   });
+    let mapProp= {
+        center: new google.maps.LatLng(51.508742,-0.120850),
+        zoom:10,
+        MapTypeId: google.maps.MapTypeId.SATELLITE 
+    };
+    let map = new google.maps.Map(document.getElementById("displayMap"),mapProp);
+    
+//     let geocoder = new google.maps.Geocoder(); 
+//     let map="";
+//     geocoder.geocode({
+//         address:location 
+//     }, function(results, status) {
+//         if(status == google.maps.GeocoderStatus.OK) {
+//             let latLong = results[0].geometry.location
+//             let mapProp= {
+//                 center: new google.maps.LatLng(latLong.lat(),latLong.lng()),
+//                 zoom:10,
+//                 MapTypeId: google.maps.MapTypeId.TERRAIN
+//             };
+//              map = new google.maps.Map(document.getElementById("displayMap"),mapProp);
+        
+//         }
+//         else {  //location is not found
+//         console.log('status error: ' + status);
+//         let mapProp= {
+//             center: new google.maps.LatLng(51.508742,-0.120850),
+//             zoom:10,
+//             MapTypeId: google.maps.MapTypeId.TERRAIN
+//         };
+//         let map = new google.maps.Map(document.getElementById("displayMap"),mapProp);
+//         }
+//   });
+    return map;
+}
+
+function setmarker(map, job){
+
+     let marker = new google.maps.Marker({
+        position: {lat: parseFloat(job.location.lat), lng: parseFloat(job.location.long)},
+        map: map,
+        title: job.title,
+        clickable: true,
+        animation: google.maps.Animation.DROP
+      });
+      
+      map.setCenter(marker.getPosition());
+      map.setZoom(15);
+      google.maps.event.addListener(marker, 'click', function(event) {
+        var infowindow = new google.maps.InfoWindow({
+            content: `
+            <div class="markerInfo">
+            <h3>${job.title}</h3>
+            <a href=${job.url}>${job.url}</a>
+          </div> `
+          });
+          infowindow.open(map,this);
+      });
+     
 }
 
 $(document).ready(function () {
+
 
     $("#jobSubmit").click(function(event){
         event.preventDefault();
@@ -249,7 +307,7 @@ $(document).ready(function () {
         }else{
         loadData(); // display loading gif imagine while waiting for data to be laod. 
         executeGetJobs(jobTitle, location);
-        initMap(location);
+        
         }
         
 
