@@ -319,6 +319,7 @@ function executeGetJobs(title, location) {
 
                     console.log(storedRefs)
                     allJobCounter++;
+<<<<<<< HEAD
 
                     let uniqueKey;
 
@@ -332,6 +333,21 @@ function executeGetJobs(title, location) {
 
                     firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
 
+=======
+
+                    let uniqueKey;
+
+                    do {
+                        uniqueKey = Math.floor(Math.random() * 100000000000)
+                        //console.log(uniqueKey)
+                        //console.log(storedRefs.includes(uniqueKey))
+                    } while (storedRefs.includes(uniqueKey))
+
+                    storedRefs.push(uniqueKey);
+
+                    firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
+
+>>>>>>> fixed push to firebase
                     firebaseData.ref(`${userDirectory}/userData`).set({
                         username: userDirectory,
                         stored: storedRefs
