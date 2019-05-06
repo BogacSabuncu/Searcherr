@@ -35,7 +35,14 @@ body {
 }
 
 #main{
-    padding-top: 20px;
+    margin: 20px auto;
+    border: 1px solid black;
+}
+.searchParamter{
+    padding: 20px;
+    width:80%;
+    margin:20px auto;
+    border:1px solid black;
 }
 
 /* login   */
