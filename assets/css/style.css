@@ -7,32 +7,29 @@ body {
 }
 
 .jumbotron {
-    height: 20vh;
+    height: 25vh;
     color: black;
     border-style: solid;
     background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg);
-    background-size: cover;         
+    background-size: cover;  
+    padding-top: 20px;
+    padding-bottom: 20px;       
 }
 
 
 
 
 .display4 {
-    margin-top: -20px;
     margin-bottom: 20px;
     height: 100%;
     background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80); 
     border-radius: 10px;
+    font-size: 1.5em;
+    padding: 10px;
 }
 
 
-.lead {
-    font-size: 20px;
-    color: rgb(201, 197, 197);;
-    border-style: solid;
-    background-image: url(https://thecedaliusgroup.com/wp-content/uploads/2014/08/88888-526-Business-inRed.jpg);
 
-}
 
 #main{
     margin: 20px auto;
@@ -40,7 +37,7 @@ body {
 }
 .searchParamter{
     padding: 20px;
-    width:80%;
+    width:100%;
     margin:20px auto;
     border:1px solid black;
 }
@@ -70,18 +67,32 @@ body {
     float: right;
 }
 
+
+
 @media only screen and (min-width: 320px){
-    
+    .display4 {
+        font-size: 2em;
+    } 
+
 
 }
 
 @media only screen and (min-width: 576px) {
+    .searchParamter{
+        width:95%;
     
+    }
 
 } 
 
 @media only screen and (min-width: 768px) {
+    .display4 {
+        font-size: 2.5em;
+    }
+    .searchParamter{
+        width:80%;
     
+    }
 
 } 
 
