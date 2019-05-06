@@ -98,12 +98,21 @@ function normalizeUSAJob(usaJob) {
 function govApiCall(pageCount, title, location) {
     //const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
+    const data ={
+        PositionTitle: title,
+        LocationName:location,
+        Radius: 75,
+        PositionSchedule: 1,  //part-time, full-time, temp
+        ResultsPerPage: 5,
+        Page: pageCount,
+        Fields: full
+    }
     return $.ajax({
         headers: {
             'Authorization-Key': 'uwlmWWZmxLud+37QNF/llnaucTdMV4ldss6pQ8zjEg8='
         },
         url: BASEURL_USAJOBS,
-        data: { PositionTitle: title, LocationName:location, Radius: 75, ResultsPerPage: 5, Page: pageCount },
+        data: data,
         method: "GET"
     })
 
