@@ -221,7 +221,7 @@ function loadData(){
 }
 
 $(document).ready(function () {
-
+    
     $("#jobSubmit").click(function(event){
         event.preventDefault();
         const jobTitle = $("#jobtitle").val().trim();
