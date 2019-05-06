@@ -34,8 +34,10 @@ function initFirebase() {
 
         firebaseData.ref(userDirectory).once("value").then(function (snapshot) {
             if (snapshot.val().userData.username) {
+
+                $("#sign-up-link").text(`Switch Account`);
                 $("#login-link").text(`${snapshot.val().userData.username}`);
-                $("#sign-up-link").text(``);
+                
                 //console.log("display user object" + snapshot.val());
                 //console.log(snapshot.val());
             }
