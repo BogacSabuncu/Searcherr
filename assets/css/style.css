@@ -83,3 +83,14 @@ body {
 
 } 
 
+/* */
+.cardJob{
+    width: 70%;
+    margin:0 auto;
+}
+.yesBtn{
+    float: left;
+}
+.noBtn{
+    float: right;
+}
