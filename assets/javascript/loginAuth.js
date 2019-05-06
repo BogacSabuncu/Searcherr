@@ -59,6 +59,18 @@ $(document).ready(function () {
             const user = firebaseApp.currentUser
             console.log(user)
             if (user) {
+
+                userDirectory = user.email.split("@")[0];
+
+                localStorage.setItem("currentUser", userDirectory);
+
+                firebaseData.ref(`${userDirectory}`).set({
+                    userData: {
+                        username: user.email,
+                        savedJobRefs: []
+                    }
+                });
+
                 window.location.href = "index.html";
 
                 console.log(user.email)
@@ -90,7 +102,7 @@ $(document).ready(function () {
             }
 
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             signIn(userName, password);
             //signUpSetup();
         }

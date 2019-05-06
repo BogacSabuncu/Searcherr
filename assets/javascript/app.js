@@ -1,21 +1,73 @@
-function normalizePrivateJob(originalJob) {
-    const job = {};
-    job.location = {};
 
-    //gets all the necesarry information out of the API call and assigns it to the object
-    job.title = originalJob.title || "N/A"; //Job Title
-    job.salaryMin = originalJob.salary_min || "N/A"; //minimum salary
-    job.salaryMax = originalJob.salary_max || "N/A"; //maximum salary
-    job.url = originalJob.redirect_url || "N/A"; //Url for the Job
-    job.company = originalJob.company.display_name || "N/A"; //company name
-    job.description = originalJob.description || "N/A"; //job description
-    job.location.country = originalJob.location.area[0] || "N/A"; //country
-    job.location.city = originalJob.location.area[1] || "N/A"; //city
-    job.location.lat = originalJob.latitude || "N/A"; //coordinates
-    job.location.long = originalJob.longitude || "N/A"; //coordinates
+let firebaseAuth;
+let firebaseData;
+
+let userDirectory;
+
+function initFirebase() {
+
+    //Given to you by the firebase console
+    //Identifies your specific app to the DB
+    var config = {
+        apiKey: "AIzaSyDPTi1BfLqpqxdT1RvD-kLylgoq_JDhWlU",
+        authDomain: "team-red-212d0.firebaseapp.com",
+        databaseURL: "https://team-red-212d0.firebaseio.com",
+        projectId: "team-red-212d0",
+        storageBucket: "team-red-212d0.appspot.com",
+        messagingSenderId: "1040465529140"
+    };
+
+    //Allows firebase access 
+    firebase.initializeApp(config);
+
+
+    //Initializes services we use
+    firebaseAuth = firebase.auth()
+    firebaseData = firebase.database();
+
+    userDirectory = localStorage.getItem("currentUser");
+
+
+
+    //Checks if you are logged in on your machine
+    if (userDirectory) {
+
+        firebaseData.ref(userDirectory).once("value").then(function (snapshot) {
+            if (snapshot.val().userData.username) {
+
+                $("#sign-up-link").text(`Switch Account`);
+                $("#login-link").text(`${snapshot.val().userData.username}`);
+
+                //console.log("display user object" + snapshot.val());
+                //console.log(snapshot.val());
+            }
+
+        }).catch(function () {
+            window.location.href = "login.html";
+        })
+    } else {
+        window.location.href = "login.html";
+    }
+}
+
+function normalizePrivateJob(originalJob) {
+    const job = Object.create(null);
+    job.location = Object.create(null);
+
+    job.title = originalJob.title || "N/A";
+    job.salaryMin = originalJob.salary_min || "N/A";
+    job.salaryMax = originalJob.salary_max || "N/A";
+    job.url = originalJob.redirect_url || "N/A";
+    job.company = originalJob.company.display_name || "N/A";
+    job.description = originalJob.description || "N/A";
+    job.location.country = originalJob.location.area[0] || "N/A";
+    job.location.city = originalJob.location.area[1] || "N/A";
+    job.location.lat = originalJob.latitude || "N/A";
+    job.location.long = originalJob.longitude || "N/A";
 
     return job;
 }
+
 
 function privateApiCall(pageCount, title, location) {
     let appId = "0cbadb14"; //app id for adzuna
@@ -34,7 +86,7 @@ function privateApiCall(pageCount, title, location) {
     });
 
     //ajax call
-    let apiURL = `https://api.adzuna.com/v1/api/jobs/gb/search/${pageCount}?${queryParams}`;
+    let apiURL = `https://api.adzuna.com/v1/api/jobs/us/search/${pageCount}?${queryParams}`;
     return $.ajax({
         url: apiURL,
         method: "GET"
@@ -78,30 +130,32 @@ function jobDisplay(job) {
 
 
 function normalizeUSAJob(usaJob) {
-    let job = {};
-    job.title = usaJob.PositionTitle;
-    job.company = usaJob.OrganizationName;
+    let job = Object.create(null);
+    job.title = usaJob.PositionTitle || "N/A";
+    job.company = usaJob.OrganizationName || "N/A";
     job.location = {
-        city: usaJob.PositionLocation[0].LocationName,
-        country: usaJob.PositionLocation[0].CountryCode,
-        lat: usaJob.PositionLocation[0].Longitude,
-        long: usaJob.PositionLocation[0].Latitude,
+        city: usaJob.PositionLocation[0].LocationName || "N/A",
+        country: usaJob.PositionLocation[0].CountryCode || "N/A",
+        lat: usaJob.PositionLocation[0].Longitude || "N/A",
+        long: usaJob.PositionLocation[0].Latitude || "N/A",
 
     }
-
-    job.url = usaJob.PositionURI;
-    job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange;
-    job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange;
-    job.description = usaJob.UserArea.Details.JobSummary;
-
+    job.url = usaJob.PositionURI || "N/A";
+    job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange || "N/A";
+    job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange || "N/A";
+    job.description = usaJob.UserArea.Details.JobSummary || "N/A";
+    // job.qualification = usaJob.QualificationSummary;
+    // job.startDate = usaJob.PublicationStartDate;
+    // job.closeDate = usaJob.ApplicationCloseDate;
     return job;
 
 }
 
+
 function govApiCall(pageCount, title, location) {
     //const USAJobs = [];
     const BASEURL_USAJOBS = 'https://data.usajobs.gov/api/Search?';
-    const data ={
+    const data = {
         PositionTitle: title,
         LocationName: location,
         Radius: 75,
@@ -118,16 +172,13 @@ function govApiCall(pageCount, title, location) {
         data: data,
         method: "GET"
     })
-
 }
-
-
 
 function getJobs(pageCount, title, location) {
 
     const jobSearchPromise = [privateApiCall(pageCount, title, location), govApiCall(pageCount, title, location)]; //gets the promises and puts them into an array
 
-    //waits all the promises to resolve and returns a promise out the function 
+    //waits all the promises to resolve and returns a promise out the function
     return Promise.all(jobSearchPromise).then(function (jobResults) {
         console.log(jobResults);
 
@@ -146,19 +197,78 @@ function getJobs(pageCount, title, location) {
         console.log("----------------------------------------");
         console.log(govJobResults);
 
-        //concats two arrays into one    
+        //concats two arrays into one
         const allJobs = privateJobResults.concat(govJobResults);
 
         console.log(pageCount);
+        console.log("allJobs")
+        console.log(allJobs)
 
-        return allJobs;//returns the array as the argument of the next function 
+        return allJobs;//returns the array as the argument of the next function
+
     }).catch(function (err) {
         console.log(err);
     });
 }
 
-function executeGetJobs(title, location){
+
+function jobDisplay(job) {
+    if (job) {
+        return (`
+        <div class="cardJob animated fadeInRight faster">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">${job.title}</h3>
+                </div>
+                <div class="card-body">
+     
+                    <h4>location: ${job.location.country} ${job.location.city}</h4>
+                    <h4>Company: ${job.company}</h4>
+                    <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+     
+                    <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+     
+                    <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                </div>
+                <div class="card-footer">
+                    <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                    <button class="noBtn btn btn-lg btn-danger">No</button>
+                </div>
+            </div>
+     
+        </div>
+        <div class="hideShowJobDiv" style="display: none;">
+            <p> ${job.description}</p>
+         </div>
+        `);
+    } else {
+        return `
+        <div class="cardJob animated fadeInRight faster">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Oops!</h3>
+            </div>
+            <div class="card-body">
+ 
+                  <h4>We've run out of available jobs.</h4>
+                  <h3>Please search again.</h3>
+
+              </div>
+              <div class="card-footer">
+                    <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                    <button class="noBtn btn btn-lg btn-danger">No</button>
+                </div>
+            </div>
+ 
+         </div>
+        `
+    }
+
+}
+
+function executeGetJobs(title, location) {
     /*comment from samuel. This code is working well but you to check when any result return [] array!. it is throw an error */
+
     let pageCount = 1;//page of the API call
     let map = initMap(location);
     //runs the getJobs function to get the arrays 
@@ -173,33 +283,72 @@ function executeGetJobs(title, location){
         setmarker(map, allJobs[allJobCounter]);
         $("#main").on("click", ".hideShowJobBtn", function () {
             $(".modal-body").html(allJobs[allJobCounter].description);
-            $("#jobModal").modal("toggle", {keyboard: true});
+            $("#jobModal").modal("toggle", { keyboard: true });
         })
 
         $("#main").on("click", ".yesBtn", function () {
             if (allJobCounter === allJobs.length) {
+
                 pageCount++;
-                getJobs(pageCount, title, location).then(function (allJobs) {
+
+                getJobs(pageCount, title, location).then(function (nextJobs) {
                     allJobCounter = 0;
+
+                    allJobs = nextJobs;
+
+
 
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
                     setmarker(map, allJobs[allJobCounter]);
                     allJobCounter++;
+
                 });
-            }
-            else {
+
+            } else {
+
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
                 setmarker(map, allJobs[allJobCounter]);
                 allJobCounter++;
+
+                let storedRefs;
+
+                firebaseData.ref(`${userDirectory}/userData`).once("value").then(function (snapshot) {
+                    storedRefs = snapshot.val().stored ? snapshot.val().stored : [];
+
+                    console.log(storedRefs)
+                    allJobCounter++;
+
+                    let uniqueKey;
+
+                    do {
+                        uniqueKey = Math.floor(Math.random() * 100000000000)
+                        //console.log(uniqueKey)
+                        //console.log(storedRefs.includes(uniqueKey))
+                    } while (storedRefs.includes(uniqueKey))
+
+                    storedRefs.push(uniqueKey);
+
+                    firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
+
+                    firebaseData.ref(`${userDirectory}/userData`).set({
+                        username: userDirectory,
+                        stored: storedRefs
+                    })
+                });
             }
 
         })
         $("#main").on("click", ".noBtn", function () {
             if (allJobCounter === allJobs.length) {
                 pageCount++;
-                getJobs(pageCount, title, location).then(function (allJobs) {
+                getJobs(pageCount, title, location).then(function (nextJobs) {
                     allJobCounter = 0;
+
+                    allJobs = nextJobs;
+
+                    console.log("allJiobs")
+                    console.log(allJobs)
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
                     setmarker(map, allJobs[allJobCounter]);
@@ -213,12 +362,13 @@ function executeGetJobs(title, location){
             }
 
         });
-    }).catch(function(err){
+    }).catch(function (err) {
         $("#main").html("<h1>Something went wrong!!!</h1>");
     })
 }
 
-function loadData(){
+
+function loadData() {
     $("#main").html(`<div class="LoadingData">
         <img src="https://media.giphy.com/media/kodQslB005JIc/giphy-downsized.gif" alt="data Loading">
     </div>`);
@@ -285,10 +435,13 @@ function setmarker(map, job){
      
 }
 
+
 $(document).ready(function () {
 
+    initFirebase();
 
-    $("#jobSubmit").click(function(event){
+
+    $("#jobSubmit").click(function (event) {
         event.preventDefault();
         const jobTitle = $("#jobtitle").val().trim();
         console.log(jobTitle);
@@ -302,16 +455,16 @@ $(document).ready(function () {
         console.log(salary);
         const numberofresults = $("#numberofresults").val();
         console.log(numberofresults);
-        if(!jobTitle || !location){
+        if (!jobTitle || !location) {
             console.log("enter text seearch");
         }else{
-        loadData(); // display loading gif imagine while waiting for data to be laod. 
-        executeGetJobs(jobTitle, location);
-        
-        }
-        
+            loadData(); // display loading gif imagine while waiting for data to be laod. 
+            executeGetJobs(jobTitle, location);
+        } 
+
 
     });
 
-    
-})
+
+});
+
