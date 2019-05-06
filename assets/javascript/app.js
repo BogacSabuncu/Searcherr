@@ -173,9 +173,9 @@ function executeGetJobs(title, location){
         $("#main").on("click", ".yesBtn", function () {
             if (allJobCounter === allJobs.length) {
                 pageCount++;
-                getJobs(pageCount, title, location).then(function (allJobs) {
+                getJobs(pageCount, title, location).then(function (nextJobs) {
                     allJobCounter = 0;
-
+                    allJobs = nextJobs;
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
                     allJobCounter++;
@@ -190,9 +190,10 @@ function executeGetJobs(title, location){
         $("#main").on("click", ".noBtn", function () {
             if (allJobCounter === allJobs.length) {
                 pageCount++;
-                getJobs(pageCount, title, location).then(function (allJobs) {
+                getJobs(pageCount, title, location).then(function (nextJobs) {
                     allJobCounter = 0;
 
+                    allJobs = nextJobs;
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
                     allJobCounter++;
