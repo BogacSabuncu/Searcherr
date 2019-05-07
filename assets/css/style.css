@@ -3,7 +3,9 @@
 }
 
 body {
-   background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg);
+   /*background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg);
+   */
+   background-image: url("../images/gravel.png");
    background-repeat: repeat;
 }
 
@@ -34,13 +36,13 @@ body {
 
 #main{
     margin: 20px auto;
-    border: 1px solid black;
+    
 }
 .searchParamter{
     padding: 20px;
     width:100%;
     margin:20px auto;
-    border:1px solid black;
+    background-color: #ddd;
 }
 
 /* login   */
@@ -57,10 +59,7 @@ body {
     margin: 0 auto;
 }
 
-.cardJob{
-    
 
-}
 .yesBtn{
     float: left;
 }
