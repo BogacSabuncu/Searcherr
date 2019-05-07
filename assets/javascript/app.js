@@ -51,6 +51,7 @@ function initFirebase() {
 }
 
 function normalizePrivateJob(originalJob) {
+    console.log(originalJob);
     const job = Object.create(null);
     job.location = Object.create(null);
 
@@ -130,6 +131,7 @@ function privateApiCall(pageCount, title, location) {
 
 
 function normalizeUSAJob(usaJob) {
+    console.log(originalJob);
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
     job.company = usaJob.OrganizationName || "N/A";
