@@ -319,7 +319,6 @@ function executeGetJobs(title, location) {
 
                     console.log(storedRefs)
                     allJobCounter++;
-<<<<<<< HEAD
 
                     let uniqueKey;
 
@@ -333,21 +332,6 @@ function executeGetJobs(title, location) {
 
                     firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
 
-=======
-
-                    let uniqueKey;
-
-                    do {
-                        uniqueKey = Math.floor(Math.random() * 100000000000)
-                        //console.log(uniqueKey)
-                        //console.log(storedRefs.includes(uniqueKey))
-                    } while (storedRefs.includes(uniqueKey))
-
-                    storedRefs.push(uniqueKey);
-
-                    firebaseData.ref(`${userDirectory}/${uniqueKey}`).set(allJobs[allJobCounter]);
-
->>>>>>> fixed push to firebase
                     firebaseData.ref(`${userDirectory}/userData`).set({
                         username: userDirectory,
                         stored: storedRefs
@@ -452,10 +436,81 @@ function setmarker(map, job){
      
 }
 
+function renderSavedJobs () {
+
+    console.log("Greetings")
+
+    $("#main").html(`
+        <div class="row">
+            <div class="col-6">
+                <div class="statistic-display"></div>
+                <div class="map"></div>
+            </div>
+            <div class="col-6 job-col">
+            </div>
+        </div>
+    `)
+
+    let userSavedJobsKeys;
+
+    const userSavedJobs = [];
+
+    firebaseData.ref(`${userDirectory}/userData`).once("value").then(function (snapshot) {
+
+        userSavedJobsKeys = snapshot.val().stored ? snapshot.val().stored : [];
+
+        console.log(userSavedJobsKeys)
+
+        for(let i = 0; i < userSavedJobsKeys.length; i++) {
+
+            firebaseData.ref(`${userDirectory}/${userSavedJobsKeys[i]}`).once("value").then(function (snapshot) {
+
+                userSavedJobs.push(snapshot.val());
+
+                console.log(userSavedJobs)
+    
+                $(".job-col").append(`        
+                    <div class="cardJob savedJob">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">${userSavedJobs[i].title}</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <h4>location: ${userSavedJobs[i].location.country} ${userSavedJobs[i].location.city}</h4>
+                            <h4>Company: ${userSavedJobs[i].company}</h4>
+                            <h4>Salaray [${userSavedJobs[i].salaryMin} - ${userSavedJobs[i].salaryMax}]</h4>
+
+                            <a href=${userSavedJobs[i].url} class="card-link"> Click here to apply </a><br/>
+
+                            <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal" data-selector="${i}">Job Description</button>
+                        </div>
+                        <div class="card-footer">
+                            <button class="dismiss-btn btn btn-lg btn-danger" data-selector="${i}">Dismiss</button>
+                        </div>
+                    </div>
+
+                    </div>
+                    <div class="hideShowJobDiv" style="display: none;">
+                        <p> ${userSavedJobs[i].description}</p>
+                    </div>`);
+
+                    $(".statistic-display").html(`
+                        <h1>Saved Jobs: </h1><p>${userSavedJobsKeys.length}</p>
+                    `)
+            });
+        }
+    });
+
+    return userSavedJobs
+
+}
 
 $(document).ready(function () {
 
     initFirebase();
+
+    let jobList;
 
 
     $("#jobSubmit").click(function (event) {
@@ -482,6 +537,39 @@ $(document).ready(function () {
 
     });
 
+
+    $("#savedjobs").on("click", function (event) {
+
+        jobList = renderSavedJobs();
+
+    });
+
+    $("#main").on("click", ".hideShowJobBtn", function () {
+        console.log("Greetings")
+        const i = parseInt($(this).attr("data-selector"));
+        $(".modal-body").html(jobList[i].description || "No description");
+        $("#jobModal").modal("toggle", { keyboard: true });
+    });
+
+    $("#main").on("click", ".dismiss-btn", function () {
+
+        let userSavedJobsKeys;
+
+        firebaseData.ref(`${userDirectory}/userData`).once("value").then(function (snapshot) {
+
+            userSavedJobsKeys = snapshot.val().stored ? snapshot.val().stored : [];
+
+        }).then(function () {
+            console.log("Goodbye")
+            const i = parseInt($(this).attr("data-selector"));
+            userSavedJobsKeys.splice(i, 1);
+            firebaseData.ref(`${userDirectory}/userData`).set({
+                username: userDirectory,
+                stored: userSavedJobsKeys
+            })
+            renderSavedJobs();
+    })
+    });
 
 });
 
