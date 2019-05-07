@@ -3,31 +3,32 @@
 }
 
 body {
-   background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg)
+   background-image: url(https://cdn5.vectorstock.com/i/1000x1000/86/04/newspaper-paper-background-with-space-for-text-vector-20998604.jpg);
+   background-repeat: repeat;
 }
 
 .jumbotron {
-    height: 25vh;
-    color: black;
+    height: 20vh;
     border-style: solid;
     background-image: url(https://thumbs.dreamstime.com/z/career-job-success-concept-blue-background-61621363.jpg);
     background-size: cover;  
-    padding-top: 20px;
-    padding-bottom: 20px;       
+           
 }
-
 
 
 
 .display4 {
-    margin-bottom: 20px;
+    color:whitesmoke;
     height: 100%;
     background-image: url(https://images.unsplash.com/photo-1524098837898-6b1c101a85f6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjI0MX0&auto=format&fit=crop&w=1950&q=80); 
     border-radius: 10px;
-    font-size: 1.5em;
+    font-size: 1em;
     padding: 10px;
 }
 
+.navbarHold{
+    height: 80px;
+}
 
 
 
@@ -57,8 +58,8 @@ body {
 }
 
 .cardJob{
-    width: 70%;
-    margin:0 auto;
+    
+
 }
 .yesBtn{
     float: left;
@@ -69,21 +70,38 @@ body {
 
 /* maps*/
 #displayMap{
-    height:300px;
+    height:100px;
 }
+@media only screen and (min-width: 186px){ 
+    .navbarHold{
+        height: 50px;
+    }
 
+}
 @media only screen and (min-width: 320px){
     .display4 {
-        font-size: 2em;
+        font-size: 1.5em;
     } 
-
+    #displayMap{
+        height:150px;
+    }
 
 }
 
 @media only screen and (min-width: 576px) {
+    .display4 {
+        font-size: 2em;
+    }
+    .jumbotron {
+        padding-top:32px;
+        padding-bottom: 32px;
+    } 
     .searchParamter{
         width:95%;
     
+    }
+    #displayMap{
+        height:300px;
     }
 
 } 
@@ -91,6 +109,9 @@ body {
 @media only screen and (min-width: 768px) {
     .display4 {
         font-size: 2.5em;
+    }
+    .navbarHold{
+        height: 43px;
     }
     .searchParamter{
         width:80%;
@@ -104,14 +125,3 @@ body {
 
 } 
 
-/* */
-.cardJob{
-    width: 70%;
-    margin:0 auto;
-}
-.yesBtn{
-    float: left;
-}
-.noBtn{
-    float: right;
-}
