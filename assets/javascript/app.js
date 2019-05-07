@@ -52,6 +52,7 @@ function initFirebase() {
 
 //this is a function to get all the necesarry information from the Adzuna Api and put it in an object
 function normalizePrivateJob(originalJob) {
+    console.log(originalJob);
     const job = Object.create(null);
     job.location = Object.create(null);
 
@@ -95,43 +96,10 @@ function privateApiCall(pageCount, title, location) {
 
 }
 
-//creats html to be shown for each job object
-function jobDisplay(job) {
-    return (`
-    <div class="row">
-        <div class="col-12">
-            <div class="cardJob animated fadeInRight faster">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">${job.title}</h3>
-                    </div>
-                    <div class="card-body animated fadeInLeft faster">
-                    
-                        <h4>location: ${job.location.country} ${job.location.city}</h4>
-                        <h4>Company: ${job.company}</h4>
-                        <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
-                        
-                        <a href=${job.url} class="card-link"> Click here to apply </a><br/>
-                        
-                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
-                    </div>
-                    <div class="card-footer">
-                        <button class="yesBtn btn btn-lg btn-primary">Yes</button>
-                        <button class="noBtn btn btn-lg btn-danger">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-   
-    
-    `);
-
-}
 
 //normalizes the job postings from the gov api
 function normalizeUSAJob(usaJob) {
+    console.log(originalJob);
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
     job.company = usaJob.OrganizationName || "N/A";
@@ -213,19 +181,38 @@ function jobDisplay(job) {
     if (job) {
         return (`
         <div class="cardJob animated fadeInRight faster">
-            <div class="card">
+            <div class="card text-center">
                 <div class="card-header">
-                    <h3 class="card-title">${job.title}</h3>
+                    <h3 class="card-title h3">${job.title}</h3>
                 </div>
                 <div class="card-body">
-     
-                    <h4>location: ${job.location.country} ${job.location.city}</h4>
-                    <h4>Company: ${job.company}</h4>
-                    <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
-     
-                    <a href=${job.url} class="card-link"> Click here to apply </a><br/>
-     
-                    <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> ${job.location.city}, ${job.location.country}
+                            </div>
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> ${job.company}
+                            </div>
+                            
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> [${job.salaryMin} - ${job.salaryMax}]
+                            </div>
+                            <div class="alert alert-success">
+                               <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                            </div>
+                              
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class='col-12'>
+                        <p class=" hideShowJobBtn" data-target="#jobModal">Job Description <i class="fas fa-angle-double-right"></i></p>
+                        </div>
+                        
+                    </div>
                 </div>
                 <div class="card-footer">
                     <button class="yesBtn btn btn-lg btn-primary">Yes</button>
