@@ -94,6 +94,40 @@ function privateApiCall(pageCount, title, location) {
 
 }
 
+function jobDisplay(job) {
+    return (`
+    <div class="row">
+        <div class="col-12">
+            <div class="cardJob animated fadeInRight faster">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">${job.title}</h3>
+                    </div>
+                    <div class="card-body animated fadeInLeft faster">
+                    
+                        <h4>location: ${job.location.country} ${job.location.city}</h4>
+                        <h4>Company: ${job.company}</h4>
+                        <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+                        
+                        <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                        
+                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                    </div>
+                    <div class="card-footer">
+                        <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+                        <button class="noBtn btn btn-lg btn-danger">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+   
+    
+    `);
+
+}
+
 
 function normalizeUSAJob(usaJob) {
     let job = Object.create(null);
@@ -124,8 +158,6 @@ function govApiCall(pageCount, title, location) {
     const data = {
         PositionTitle: title,
         LocationName: location,
-        Radius: 75,
-        PositionSchedule: 1,  //part-time, full-time, temp
         ResultsPerPage: 5,
         Page: pageCount,
         Fields: "full"
@@ -236,16 +268,22 @@ function executeGetJobs(title, location) {
     /*comment from samuel. This code is working well but you to check when any result return [] array!. it is throw an error */
 
     let pageCount = 1;//page of the API call
-
+    let map = initMap(location);
     //runs the getJobs function to get the arrays 
     getJobs(pageCount, title, location).then(function (allJobs) {
         //display results in the DOM
         let allJobCounter = 0;
+        
         //display the first screen
         $("#main").html(jobDisplay(allJobs[allJobCounter]));
-
+        
+        //console.log(allJobs[allJobCounter]);
+        if(allJobs.length !== 0){
+            setmarker(map, allJobs[allJobCounter]);
+        }
+        
         $("#main").on("click", ".hideShowJobBtn", function () {
-            $(".modal-body").html(allJobs[allJobCounter].description);
+            $(".modal-body").html(allJobs[allJobCounter].description || "No description");
             $("#jobModal").modal("toggle", { keyboard: true });
         })
 
@@ -263,6 +301,7 @@ function executeGetJobs(title, location) {
 
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    setmarker(map, allJobs[allJobCounter]);
                     allJobCounter++;
 
                 });
@@ -270,6 +309,8 @@ function executeGetJobs(title, location) {
             } else {
 
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                setmarker(map, allJobs[allJobCounter]);
+                allJobCounter++;
 
                 let storedRefs;
 
@@ -311,11 +352,13 @@ function executeGetJobs(title, location) {
                     console.log(allJobs)
 
                     $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    setmarker(map, allJobs[allJobCounter]);
                     allJobCounter++;
                 });
             }
             else {
                 $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                setmarker(map, allJobs[allJobCounter]);
                 allJobCounter++;
             }
 
@@ -330,6 +373,67 @@ function loadData() {
     $("#main").html(`<div class="LoadingData">
         <img src="https://media.giphy.com/media/kodQslB005JIc/giphy-downsized.gif" alt="data Loading">
     </div>`);
+}
+
+function initMap(location) {
+    let mapProp= {
+        center: new google.maps.LatLng(33.748997,-84.387985),
+        zoom:10,
+        MapTypeId: google.maps.MapTypeId.SATELLITE 
+    };
+    let map = new google.maps.Map(document.getElementById("displayMap"),mapProp);
+    
+//     let geocoder = new google.maps.Geocoder(); 
+//     let map="";
+//     geocoder.geocode({
+//         address:location 
+//     }, function(results, status) {
+//         if(status == google.maps.GeocoderStatus.OK) {
+//             let latLong = results[0].geometry.location
+//             let mapProp= {
+//                 center: new google.maps.LatLng(latLong.lat(),latLong.lng()),
+//                 zoom:10,
+//                 MapTypeId: google.maps.MapTypeId.TERRAIN
+//             };
+//              map = new google.maps.Map(document.getElementById("displayMap"),mapProp);
+        
+//         }
+//         else {  //location is not found
+//         console.log('status error: ' + status);
+//         let mapProp= {
+//             center: new google.maps.LatLng(51.508742,-0.120850),
+//             zoom:10,
+//             MapTypeId: google.maps.MapTypeId.TERRAIN
+//         };
+//         let map = new google.maps.Map(document.getElementById("displayMap"),mapProp);
+//         }
+//   });
+    return map;
+}
+
+function setmarker(map, job){
+
+     let marker = new google.maps.Marker({
+        position: {lat: parseFloat(job.location.lat), lng: parseFloat(job.location.long)},
+        map: map,
+        title: job.title,
+        clickable: true,
+        animation: google.maps.Animation.DROP
+      });
+      
+      map.setCenter(marker.getPosition());
+      map.setZoom(15);
+      google.maps.event.addListener(marker, 'click', function(event) {
+        var infowindow = new google.maps.InfoWindow({
+            content: `
+            <div class="markerInfo">
+            <h3>${job.title}</h3>
+            <a href=${job.url}>${job.url}</a>
+          </div> `
+          });
+          infowindow.open(map,this);
+      });
+     
 }
 
 
@@ -354,10 +458,10 @@ $(document).ready(function () {
         console.log(numberofresults);
         if (!jobTitle || !location) {
             console.log("enter text seearch");
-        } else {
-            loadData(); // display loading gif imagine while waiting for data to be laod.
+        }else{
+            loadData(); // display loading gif imagine while waiting for data to be laod. 
             executeGetJobs(jobTitle, location);
-        }
+        } 
 
 
     });
