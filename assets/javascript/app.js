@@ -131,7 +131,6 @@ function privateApiCall(pageCount, title, location) {
 
 
 function normalizeUSAJob(usaJob) {
-    console.log(originalJob);
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
     job.company = usaJob.OrganizationName || "N/A";
@@ -329,17 +328,10 @@ function executeGetJobs(title, location) {
 
             } else {
 
-                $("#main").html(jobDisplay(allJobs[allJobCounter]));
-                setmarker(map, allJobs[allJobCounter]);
-                allJobCounter++;
-
                 let storedRefs;
 
                 firebaseData.ref(`${userDirectory}/userData`).once("value").then(function (snapshot) {
                     storedRefs = snapshot.val().stored ? snapshot.val().stored : [];
-
-                    console.log(storedRefs)
-                    allJobCounter++;
 
                     let uniqueKey;
 
@@ -357,7 +349,14 @@ function executeGetJobs(title, location) {
                         username: userDirectory,
                         stored: storedRefs
                     })
+                }).then(function () {
+
+                    $("#main").html(jobDisplay(allJobs[allJobCounter]));
+                    setmarker(map, allJobs[allJobCounter]);
+                    allJobCounter++;
+                    
                 });
+
             }
 
         })
@@ -505,7 +504,7 @@ function renderSavedJobs () {
 
                             <a href=${userSavedJobs[i].url} class="card-link"> Click here to apply </a><br/>
 
-                            <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal" data-selector="${i}">Job Description</button>
+                            <button class="btn btn-primary saved-desc-display" data-target="#jobModal" data-selector="${i}">Job Description</button>
                         </div>
                         <div class="card-footer">
                             <button class="dismiss-btn btn btn-lg btn-danger" data-selector="${i}">Dismiss</button>
@@ -568,7 +567,7 @@ $(document).ready(function () {
 
 
     //click handler for the description button on saved jobs page
-    $("#main").on("click", ".hideShowJobBtn", function () {
+    $("#main").on("click", ".saved-desc-display", function () {
         const i = parseInt($(this).attr("data-selector"));
         $(".modal-body").html(jobList[i].description || "No description");
         $("#jobModal").modal("toggle", { keyboard: true });
