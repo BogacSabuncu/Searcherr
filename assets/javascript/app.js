@@ -420,19 +420,22 @@ function setmarker(map, job){
      
 }
 
+
+
+
 //calls on click of the saved jobs button. Renders saved jobs
 function renderSavedJobs () {
-
     $("#main").html(`
-        <div class="row">
-            <div class="col-6">
+       <div>
+            <div class="row">
                 <div class="statistic-display"></div>
-                <div class="map"></div>
             </div>
-            <div class="col-6 job-col">
+            <div class=" job-col">
+                
             </div>
-        </div>
-    `)
+        </div>  
+    `);
+
 
     let userSavedJobsKeys;
 
@@ -454,7 +457,7 @@ function renderSavedJobs () {
 
 
                 //appends each job card
-                $(".job-col").append(`        
+                $(".job-col").append(`       
                     <div class="cardJob savedJob">
                     <div class="card">
                         <div class="card-header">
@@ -476,12 +479,10 @@ function renderSavedJobs () {
                     </div>
 
                     </div>
-                    <div class="hideShowJobDiv" style="display: none;">
-                        <p> ${userSavedJobs[i].description}</p>
-                    </div>`);
+                    `);
 
                     $(".statistic-display").html(`
-                        <h1>Saved Jobs: </h1><p>${userSavedJobsKeys.length}</p>
+                        <h1>Saved Jobs: ${userSavedJobsKeys.length} </h1>
                     `)
             });
         }
