@@ -141,7 +141,16 @@ $(document).ready(function () {
     function renderConfirmPassword(hasRun) {
 
         return {
-            confirmArea: `<div class="input-group input-group-lg"><div class="input-group-prepend"><span class="input-group-text" id="inputGroup-sizing-lg">Confirm Password</span></div><input type="text" id="password-confirm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" value="" /></div>`,
+            confirmArea: `
+            <div class="input-group input-group-lg">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-lg">Confirm Password</span>
+                        </div>
+                        <input id="password-confirm" type="password" class="form-control" aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-lg" />
+                    </div>
+            
+            `,
             status: hasRun
         }
     }
