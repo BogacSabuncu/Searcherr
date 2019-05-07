@@ -50,6 +50,7 @@ function initFirebase() {
     }
 }
 
+//this is a function to get all the necesarry information from the Adzuna Api and put it in an object
 function normalizePrivateJob(originalJob) {
     const job = Object.create(null);
     job.location = Object.create(null);
@@ -94,6 +95,7 @@ function privateApiCall(pageCount, title, location) {
 
 }
 
+//creats html to be shown for each job object
 function jobDisplay(job) {
     return (`
     <div class="row">
@@ -128,7 +130,7 @@ function jobDisplay(job) {
 
 }
 
-
+//normalizes the job postings from the gov api
 function normalizeUSAJob(usaJob) {
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
@@ -144,9 +146,6 @@ function normalizeUSAJob(usaJob) {
     job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange || "N/A";
     job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange || "N/A";
     job.description = usaJob.UserArea.Details.JobSummary || "N/A";
-    // job.qualification = usaJob.QualificationSummary;
-    // job.startDate = usaJob.PublicationStartDate;
-    // job.closeDate = usaJob.ApplicationCloseDate;
     return job;
 
 }
