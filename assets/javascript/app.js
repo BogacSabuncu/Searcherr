@@ -51,6 +51,7 @@ function initFirebase() {
 }
 
 function normalizePrivateJob(originalJob) {
+    console.log(originalJob);
     const job = Object.create(null);
     job.location = Object.create(null);
 
@@ -94,42 +95,43 @@ function privateApiCall(pageCount, title, location) {
 
 }
 
-function jobDisplay(job) {
-    return (`
-    <div class="row">
-        <div class="col-12">
-            <div class="cardJob animated fadeInRight faster">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">${job.title}</h3>
-                    </div>
-                    <div class="card-body animated fadeInLeft faster">
+// function jobDisplay(job) {
+//     return (`
+//     <div class="row">
+//         <div class="col-12">
+//             <div class="cardJob animated fadeInRight faster">
+//                 <div class="card">
+//                     <div class="card-header">
+//                         <h3 class="card-title">${job.title}</h3>
+//                     </div>
+//                     <div class="card-body animated fadeInLeft faster">
                     
-                        <h4>location: ${job.location.country} ${job.location.city}</h4>
-                        <h4>Company: ${job.company}</h4>
-                        <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+//                         <h4>location: ${job.location.country} ${job.location.city}</h4>
+//                         <h4>Company: ${job.company}</h4>
+//                         <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
                         
-                        <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+//                         <a href=${job.url} class="card-link"> Click here to apply </a><br/>
                         
-                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
-                    </div>
-                    <div class="card-footer">
-                        <button class="yesBtn btn btn-lg btn-primary">Yes</button>
-                        <button class="noBtn btn btn-lg btn-danger">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+//                         <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+//                     </div>
+//                     <div class="card-footer">
+//                         <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+//                         <button class="noBtn btn btn-lg btn-danger">No</button>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
         
-    </div>
+//     </div>
    
     
-    `);
+//     `);
 
-}
+// }
 
 
 function normalizeUSAJob(usaJob) {
+    console.log(originalJob);
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
     job.company = usaJob.OrganizationName || "N/A";
@@ -214,19 +216,38 @@ function jobDisplay(job) {
     if (job) {
         return (`
         <div class="cardJob animated fadeInRight faster">
-            <div class="card">
+            <div class="card text-center">
                 <div class="card-header">
-                    <h3 class="card-title">${job.title}</h3>
+                    <h3 class="card-title h3">${job.title}</h3>
                 </div>
                 <div class="card-body">
-     
-                    <h4>location: ${job.location.country} ${job.location.city}</h4>
-                    <h4>Company: ${job.company}</h4>
-                    <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
-     
-                    <a href=${job.url} class="card-link"> Click here to apply </a><br/>
-     
-                    <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> ${job.location.city}, ${job.location.country}
+                            </div>
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> ${job.company}
+                            </div>
+                            
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> [${job.salaryMin} - ${job.salaryMax}]
+                            </div>
+                            <div class="alert alert-success">
+                               <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                            </div>
+                              
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class='col-12'>
+                        <p class=" hideShowJobBtn" data-target="#jobModal">Job Description <i class="fas fa-angle-double-right"></i></p>
+                        </div>
+                        
+                    </div>
                 </div>
                 <div class="card-footer">
                     <button class="yesBtn btn btn-lg btn-primary">Yes</button>
@@ -436,9 +457,8 @@ function setmarker(map, job){
      
 }
 
+//calls on click of the saved jobs button. Renders saved jobs
 function renderSavedJobs () {
-
-    console.log("Greetings")
 
     $("#main").html(`
         <div class="row">
@@ -468,7 +488,9 @@ function renderSavedJobs () {
                 userSavedJobs.push(snapshot.val());
 
                 console.log(userSavedJobs)
-    
+
+
+                //appends each job card
                 $(".job-col").append(`        
                     <div class="cardJob savedJob">
                     <div class="card">
@@ -544,13 +566,15 @@ $(document).ready(function () {
 
     });
 
+
+    //click handler for the description button on saved jobs page
     $("#main").on("click", ".hideShowJobBtn", function () {
-        console.log("Greetings")
         const i = parseInt($(this).attr("data-selector"));
         $(".modal-body").html(jobList[i].description || "No description");
         $("#jobModal").modal("toggle", { keyboard: true });
     });
 
+    //click handler for the dismiss button on saved jobs page
     $("#main").on("click", ".dismiss-btn", function () {
 
         let userSavedJobsKeys;
@@ -560,7 +584,6 @@ $(document).ready(function () {
             userSavedJobsKeys = snapshot.val().stored ? snapshot.val().stored : [];
 
         }).then(function () {
-            console.log("Goodbye")
             const i = parseInt($(this).attr("data-selector"));
             userSavedJobsKeys.splice(i, 1);
             firebaseData.ref(`${userDirectory}/userData`).set({

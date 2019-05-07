@@ -12,6 +12,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgNkTyCSdBmorHEZxbNLso8_cOEmW2jb8&" ></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
   <script src="assets/javascript/app.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
   <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
@@ -20,11 +21,40 @@
 
 
 <body>
-
+  <!-- <p class="lead">Best job search known to man.<a href="login.html" class="login-link">login</a></p>
+      NavBar -->
+      <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-horse-head"></i>JobSearch</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link " href="#savedjobs"><i class="fas fa-save"></i>Saved Jobs</a>
+            </li> <!--
+            <li class="nav-item">
+              <a class="nav-link" href="#mysearches">My Searches</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#account">Account</a>
+            </li>  -->
+            <li class="nav-item">
+              <a class="nav-link" href="login.html" id="login-link">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html" id="sign-up-link">Sign Up</a>
+            </li>
+            
+          </ul>
+        </div>
+      </nav>
+      <!-- NavBar -->
+      <div class="navbarHold"></div>
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
       <div class="display4 text-center">
-          <h1 >JOB SEARCH</h1>
+          <h1>JOB SEARCH</h1>
       </div>
     </div>
     <!-- <p class="lead">Best job search known to man.<a href="login.html" class="login-link">login</a></p>
@@ -81,7 +111,7 @@
                   </div>
                 </div>
               </div>  
-              <h5 data-toggle="collapse" data-target="#moreOptions" class="p-2">More options >>></h5> 
+              <h5 data-toggle="collapse" data-target="#moreOptions" class="p-2"><i class="fas fa-caret-down " style="font-size:1.5em"></i>More Options <i class="fas fa-caret-down " style="font-size:1.5em"></i></h5> 
         </div>
         <div class="optionalParameter  collapse" id="moreOptions" >
             <div class="row">
@@ -147,7 +177,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn btn-primary btn-lg btn-block" id="jobSubmit">Submit</button>
+                <button type="button" class="btn btn-primary btn-lg btn-block" id="jobSubmit">Search <i class="fas fa-search"></i></button>
             </div>
               
           </div>
