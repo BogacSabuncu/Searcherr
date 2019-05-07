@@ -348,7 +348,7 @@ function executeGetJobs(title, location) {
 
         });
     }).catch(function (err) {
-        $("#main").html("<h1>Something went wrong!!!</h1>");
+        $("#main").html(`<h1 class="h1">Something went wrong!!!</h1>`);
     })
 }
 
@@ -427,12 +427,8 @@ function setmarker(map, job){
 function renderSavedJobs () {
     $("#main").html(`
        <div>
-            <div class="row">
-                <div class="statistic-display"></div>
-            </div>
-            <div class=" job-col">
-                
-            </div>
+            <div class="statistic-display text-center"></div>
+            <div class=" job-col"></div>
         </div>  
     `);
 
@@ -482,7 +478,7 @@ function renderSavedJobs () {
                     `);
 
                     $(".statistic-display").html(`
-                        <h1>Saved Jobs: ${userSavedJobsKeys.length} </h1>
+                        <h1 class="h1 text-center">Saved Jobs: ${userSavedJobsKeys.length} </h1>
                     `)
             });
         }
