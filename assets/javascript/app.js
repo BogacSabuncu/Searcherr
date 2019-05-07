@@ -216,17 +216,32 @@ function jobDisplay(job) {
         <div class="cardJob animated fadeInRight faster">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">${job.title}</h3>
+                    <h3 class="card-title h3">${job.title}</h3>
                 </div>
                 <div class="card-body">
-     
-                    <h4>location: ${job.location.country} ${job.location.city}</h4>
-                    <h4>Company: ${job.company}</h4>
-                    <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
-     
-                    <a href=${job.url} class="card-link"> Click here to apply </a><br/>
-     
-                    <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> ${job.location.city}, ${job.location.country}
+                            </div>
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> ${job.company}
+                            </div>
+                            
+                            
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="alert alert-success">
+                               <strong>Location: </strong> [${job.salaryMin} - ${job.salaryMax}]
+                            </div>
+                            <div class="alert alert-success">
+                               <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+                            </div>
+                              
+                        </div>
+                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                    </div>
+          
                 </div>
                 <div class="card-footer">
                     <button class="yesBtn btn btn-lg btn-primary">Yes</button>
