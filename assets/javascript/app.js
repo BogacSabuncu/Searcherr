@@ -94,39 +94,39 @@ function privateApiCall(pageCount, title, location) {
 
 }
 
-function jobDisplay(job) {
-    return (`
-    <div class="row">
-        <div class="col-12">
-            <div class="cardJob animated fadeInRight faster">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">${job.title}</h3>
-                    </div>
-                    <div class="card-body animated fadeInLeft faster">
+// function jobDisplay(job) {
+//     return (`
+//     <div class="row">
+//         <div class="col-12">
+//             <div class="cardJob animated fadeInRight faster">
+//                 <div class="card">
+//                     <div class="card-header">
+//                         <h3 class="card-title">${job.title}</h3>
+//                     </div>
+//                     <div class="card-body animated fadeInLeft faster">
                     
-                        <h4>location: ${job.location.country} ${job.location.city}</h4>
-                        <h4>Company: ${job.company}</h4>
-                        <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
+//                         <h4>location: ${job.location.country} ${job.location.city}</h4>
+//                         <h4>Company: ${job.company}</h4>
+//                         <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
                         
-                        <a href=${job.url} class="card-link"> Click here to apply </a><br/>
+//                         <a href=${job.url} class="card-link"> Click here to apply </a><br/>
                         
-                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
-                    </div>
-                    <div class="card-footer">
-                        <button class="yesBtn btn btn-lg btn-primary">Yes</button>
-                        <button class="noBtn btn btn-lg btn-danger">No</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+//                         <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+//                     </div>
+//                     <div class="card-footer">
+//                         <button class="yesBtn btn btn-lg btn-primary">Yes</button>
+//                         <button class="noBtn btn btn-lg btn-danger">No</button>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
         
-    </div>
+//     </div>
    
     
-    `);
+//     `);
 
-}
+// }
 
 
 function normalizeUSAJob(usaJob) {
@@ -214,7 +214,7 @@ function jobDisplay(job) {
     if (job) {
         return (`
         <div class="cardJob animated fadeInRight faster">
-            <div class="card">
+            <div class="card text-center">
                 <div class="card-header">
                     <h3 class="card-title h3">${job.title}</h3>
                 </div>
@@ -228,7 +228,6 @@ function jobDisplay(job) {
                                <strong>Location: </strong> ${job.company}
                             </div>
                             
-                            
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="alert alert-success">
@@ -239,9 +238,14 @@ function jobDisplay(job) {
                             </div>
                               
                         </div>
-                        <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
+                        
                     </div>
-          
+                    <div class="row">
+                        <div class='col-12'>
+                        <p class=" hideShowJobBtn" data-target="#jobModal">Job Description <i class="fas fa-angle-double-right"></i></p>
+                        </div>
+                        
+                    </div>
                 </div>
                 <div class="card-footer">
                     <button class="yesBtn btn btn-lg btn-primary">Yes</button>
