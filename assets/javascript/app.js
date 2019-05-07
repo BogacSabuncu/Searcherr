@@ -51,7 +51,6 @@ function initFirebase() {
 }
 
 function normalizePrivateJob(originalJob) {
-    console.log(originalJob);
     const job = Object.create(null);
     job.location = Object.create(null);
 
@@ -131,7 +130,6 @@ function privateApiCall(pageCount, title, location) {
 
 
 function normalizeUSAJob(usaJob) {
-    console.log(originalJob);
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
     job.company = usaJob.OrganizationName || "N/A";
@@ -227,13 +225,13 @@ function jobDisplay(job) {
                                <strong>Location: </strong> ${job.location.city}, ${job.location.country}
                             </div>
                             <div class="alert alert-success">
-                               <strong>Location: </strong> ${job.company}
+                               <strong>Company: </strong> ${job.company}
                             </div>
                             
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="alert alert-success">
-                               <strong>Location: </strong> [${job.salaryMin} - ${job.salaryMax}]
+                               <strong>Salary: </strong> [${job.salaryMin} - ${job.salaryMax}]
                             </div>
                             <div class="alert alert-success">
                                <a href=${job.url} class="card-link"> Click here to apply </a><br/>
