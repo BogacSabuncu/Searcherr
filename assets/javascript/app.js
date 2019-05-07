@@ -158,8 +158,6 @@ function govApiCall(pageCount, title, location) {
     const data = {
         PositionTitle: title,
         LocationName: location,
-        Radius: 75,
-        PositionSchedule: 1,  //part-time, full-time, temp
         ResultsPerPage: 5,
         Page: pageCount,
         Fields: "full"
@@ -278,11 +276,14 @@ function executeGetJobs(title, location) {
         
         //display the first screen
         $("#main").html(jobDisplay(allJobs[allJobCounter]));
-        //let locat = allJobs[allJobCounter].location
-        console.log(allJobs[allJobCounter]);
-        setmarker(map, allJobs[allJobCounter]);
+        
+        //console.log(allJobs[allJobCounter]);
+        if(allJobs.length !== 0){
+            setmarker(map, allJobs[allJobCounter]);
+        }
+        
         $("#main").on("click", ".hideShowJobBtn", function () {
-            $(".modal-body").html(allJobs[allJobCounter].description);
+            $(".modal-body").html(allJobs[allJobCounter].description || "No description");
             $("#jobModal").modal("toggle", { keyboard: true });
         })
 
@@ -376,7 +377,7 @@ function loadData() {
 
 function initMap(location) {
     let mapProp= {
-        center: new google.maps.LatLng(51.508742,-0.120850),
+        center: new google.maps.LatLng(33.748997,-84.387985),
         zoom:10,
         MapTypeId: google.maps.MapTypeId.SATELLITE 
     };
