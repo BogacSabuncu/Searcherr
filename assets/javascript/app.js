@@ -50,6 +50,7 @@ function initFirebase() {
     }
 }
 
+//this is a function to get all the necesarry information from the Adzuna Api and put it in an object
 function normalizePrivateJob(originalJob) {
     const job = Object.create(null);
     job.location = Object.create(null);
@@ -94,41 +95,8 @@ function privateApiCall(pageCount, title, location) {
 
 }
 
-// function jobDisplay(job) {
-//     return (`
-//     <div class="row">
-//         <div class="col-12">
-//             <div class="cardJob animated fadeInRight faster">
-//                 <div class="card">
-//                     <div class="card-header">
-//                         <h3 class="card-title">${job.title}</h3>
-//                     </div>
-//                     <div class="card-body animated fadeInLeft faster">
-                    
-//                         <h4>location: ${job.location.country} ${job.location.city}</h4>
-//                         <h4>Company: ${job.company}</h4>
-//                         <h4>Salaray [${job.salaryMin} - ${job.salaryMax}]</h4>
-                        
-//                         <a href=${job.url} class="card-link"> Click here to apply </a><br/>
-                        
-//                         <button class="btn btn-primary hideShowJobBtn" data-target="#jobModal">Job Description</button>
-//                     </div>
-//                     <div class="card-footer">
-//                         <button class="yesBtn btn btn-lg btn-primary">Yes</button>
-//                         <button class="noBtn btn btn-lg btn-danger">No</button>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-        
-//     </div>
-   
-    
-//     `);
 
-// }
-
-
+//normalizes the job postings from the gov api
 function normalizeUSAJob(usaJob) {
     let job = Object.create(null);
     job.title = usaJob.PositionTitle || "N/A";
@@ -144,9 +112,6 @@ function normalizeUSAJob(usaJob) {
     job.salaryMin = usaJob.PositionRemuneration[0].MinimumRange || "N/A";
     job.salaryMax = usaJob.PositionRemuneration[0].MaximumRange || "N/A";
     job.description = usaJob.UserArea.Details.JobSummary || "N/A";
-    // job.qualification = usaJob.QualificationSummary;
-    // job.startDate = usaJob.PublicationStartDate;
-    // job.closeDate = usaJob.ApplicationCloseDate;
     return job;
 
 }
