@@ -38,6 +38,16 @@ body {
     margin: 20px auto;
     
 }
+.savedJob{
+    display: inline-block;
+}
+.job-col{
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
 .searchParamter{
     padding: 20px;
     width:100%;
