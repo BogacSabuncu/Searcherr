@@ -2,9 +2,14 @@
 ## TeamRed
 #### Brandon Blanks - Sam Djiani - Tyler Mathena - Bogac Sabuncu
 
+![Image of search screen](./images/search-screen.png)
+
 ### Description:
 This app is a browser job search tool that makes the process easier. You can log in to your own account and start looking for a new job. It shows you job postings one by one, where you can view different aspects of a job: the company, position, salary range, job description and even the location. After deciding on if you would like to apply to the job or not, you can view all the jobs you've liked on your personal saved page.
 ***
+
+![Image of search screen](./images/job-search.png)
+
 ### Technologies:
 For retrieving the job postings we have used two different APIs:
 
@@ -24,6 +29,9 @@ For some design features:
 * Bootstrap Framework: https://getbootstrap.com/
 * CSS animation: https://github.com/daneden/animate.css
 
-### Link
+![Image of search screen](./images/saved-screen.png)
 
+***
+### Link
 https://bogacsabuncu.github.io/Searcherr/
+
