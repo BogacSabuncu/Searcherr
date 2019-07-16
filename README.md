@@ -1,5 +1,6 @@
-# Project Title TBD
-## **TeamRed**
+# Searcherr
+## TeamRed
+#### Brandon Blanks - Sam Djiani - Tyler Mathena - Bogac Sabuncu
 
 ![Image of search screen](./images/search-screen.png)
 
@@ -33,3 +34,4 @@ For some design features:
 ***
 ### Link
 https://bogacsabuncu.github.io/Searcherr/
+
